@@ -1,0 +1,427 @@
+.builder-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.builder-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.back-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: var(--transition-smooth);
+}
+
+.back-link:hover {
+  color: var(--color-gold);
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+}
+
+.builder-header h1 {
+  font-size: 2.25rem;
+}
+
+.builder-header p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+/* Workspace Split Layout */
+.builder-workspace {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .builder-workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+.workspace-left, .workspace-right {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Configurations Card */
+.config-card h3, .squad-card h3, .market-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-left: 3px solid var(--color-gold);
+  padding-left: 0.75rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+}
+
+/* Jersey Selector Styling */
+.jersey-selection-area {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-card);
+}
+
+.jersey-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.jersey-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-card);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.jersey-btn .j-icon {
+  font-size: 1.25rem;
+  transition: var(--transition-smooth);
+}
+
+.jersey-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
+}
+
+.jersey-btn.active {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+/* Custom Jersey Colors */
+.jersey-yellow.active { background: rgba(255, 215, 0, 0.15); }
+.jersey-pink.active { background: rgba(236, 72, 153, 0.15); border-color: var(--color-pink); box-shadow: 0 0 10px rgba(236, 72, 153, 0.2); }
+.jersey-red.active { background: rgba(239, 68, 68, 0.15); border-color: var(--color-red); box-shadow: 0 0 10px rgba(239, 68, 68, 0.2); }
+.jersey-green.active { background: rgba(16, 185, 129, 0.15); border-color: var(--color-success); box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
+.jersey-rainbow.active { background: rgba(255, 255, 255, 0.08); border-color: #a855f7; }
+.jersey-dark.active { background: rgba(30, 35, 45, 0.5); border-color: #ffd700; }
+.jersey-blue.active { background: rgba(59, 130, 246, 0.15); border-color: #3b82f6; }
+.jersey-polka.active { background: rgba(255, 255, 255, 0.08); border-color: #ef4444; }
+
+/* Status & Budget Card */
+.status-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+.status-summary {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.metric:not(:last-child) {
+  border-right: 1px solid var(--border-card);
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+
+.metric-value {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.budget-bar-container {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.budget-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-success) 0%, var(--color-gold) 70%, var(--color-pink) 100%);
+  border-radius: 4px;
+  transition: width 0.4s cubic-bezier(0.1, 0.8, 0.1, 1);
+}
+
+.budget-bar-fill.bg-danger {
+  background: var(--color-error);
+}
+
+.validation-warning {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.btn-block-save {
+  width: 100%;
+  padding: 0.9rem;
+  font-size: 1.1rem;
+}
+
+/* Squad Selected List */
+.squad-slots-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.squad-rider-row, .squad-rider-row-placeholder {
+  display: flex;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  height: 65px;
+}
+
+.squad-rider-row {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-card);
+  justify-content: space-between;
+  transition: var(--transition-smooth);
+}
+
+.squad-rider-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.rider-avatar {
+  font-size: 1.5rem;
+  margin-right: 0.75rem;
+}
+
+.rider-info-main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.rider-info-main h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.rider-info-main p {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.rider-info-cost {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.rider-info-cost span {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.btn-remove-rider {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  line-height: 1;
+}
+
+.btn-remove-rider:hover {
+  color: var(--color-error);
+  transform: scale(1.2);
+}
+
+.squad-rider-row-placeholder {
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px dashed rgba(255, 255, 255, 0.05);
+  gap: 1rem;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 0.85rem;
+}
+
+.p-num {
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.1);
+}
+
+/* Athlete Market Card styling */
+.market-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.market-header p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.market-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-card);
+}
+
+.filter-dropdowns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.market-athletes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+/* Scrollbar styling */
+.market-athletes-list::-webkit-scrollbar {
+  width: 6px;
+}
+.market-athletes-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.market-athletes-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+.market-athletes-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.market-athlete-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-card);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.market-athlete-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateX(2px);
+}
+
+.market-athlete-card.selected {
+  background: rgba(16, 185, 129, 0.05);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.athlete-flag-name {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.flag-icon {
+  font-size: 1.25rem;
+  opacity: 0.7;
+}
+
+.athlete-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.athlete-sub {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.athlete-market-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.athlete-cost {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.btn-select-athlete {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-card);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.market-athlete-card:hover .btn-select-athlete {
+  background: var(--color-gold);
+  color: #000;
+}
+
+.market-athlete-card.selected .btn-select-athlete,
+.market-athlete-card.selected:hover .btn-select-athlete {
+  background: var(--color-success);
+  color: #fff;
+  border-color: var(--color-success);
+}
+
+.no-athletes-found {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 3rem;
+}
+
+.alert-success {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--color-success);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}

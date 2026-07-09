@@ -1,0 +1,209 @@
+<div class="admin-container container-main animate-fade-in">
+  <div class="admin-header">
+    <h2>Ligas de Ciclismo Fantasy 🏆</h2>
+    <p class="section-subtitle">Monte sua própria liga para competir com amigos ou entre em ligas existentes usando o código numérico.</p>
+  </div>
+
+  <!-- Messages -->
+  @if (errorMessage) {
+    <div class="alert alert-error animate-fade-in">
+      <span>⚠️ {{ errorMessage }}</span>
+    </div>
+  }
+  @if (successMessage) {
+    <div class="alert alert-success animate-fade-in">
+      <span>✅ {{ successMessage }}</span>
+    </div>
+  }
+
+  <div class="admin-workspace">
+    <!-- Left Column: Forms -->
+    <div class="workspace-left">
+      <!-- Create League Form -->
+      <div class="glass-card form-card" style="margin-bottom: 2rem;">
+        <h3>Criar Nova Liga</h3>
+        <p class="section-subtitle" style="margin-bottom: 1.5rem;">Crie uma liga privada e compartilhe o código gerado.</p>
+        
+        <form (ngSubmit)="onCreateLeague()" #createForm="ngForm">
+          <div class="form-group">
+            <label for="lName" class="form-label">Nome da Liga</label>
+            <input 
+              type="text" 
+              id="lName" 
+              name="lName"
+              class="form-control" 
+              [(ngModel)]="leagueName" 
+              required
+              placeholder="Ex: Liga dos Clássicos"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="lRace" class="form-label">Evento/Prova Relacionada</label>
+            <select 
+              id="lRace" 
+              name="lRace"
+              class="form-control" 
+              [(ngModel)]="selectedRaceId"
+              required
+            >
+              @for (race of races; track race.id) {
+                <option [value]="race.id">{{ race.name }} ({{ race.year }})</option>
+              }
+            </select>
+          </div>
+
+          <button 
+            type="submit" 
+            class="btn btn-primary btn-block-save"
+            [disabled]="createForm.invalid || isSubmitting"
+          >
+            Criar Liga 🏁
+          </button>
+        </form>
+      </div>
+
+      <!-- Join League Form -->
+      <div class="glass-card form-card">
+        <h3>Participar de uma Liga</h3>
+        <p class="section-subtitle" style="margin-bottom: 1.5rem;">Insira o código numérico de compartilhamento enviado por seu amigo.</p>
+        
+        <form (ngSubmit)="onJoinLeague()" #joinForm="ngForm">
+          <div class="form-group">
+            <label for="jCode" class="form-label">Código de Convite</label>
+            <input 
+              type="text" 
+              id="jCode" 
+              name="jCode"
+              class="form-control" 
+              [(ngModel)]="joinCode" 
+              required
+              pattern="^[0-9]{6}$"
+              placeholder="Ex: 582103 (6 dígitos)"
+              maxLength="6"
+            />
+          </div>
+
+          <button 
+            type="submit" 
+            class="btn btn-primary btn-block-save"
+            [disabled]="joinForm.invalid || isSubmitting"
+            style="background: linear-gradient(135deg, var(--color-cyan) 0%, #0088cc 100%);"
+          >
+            Participar da Liga 🤝
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right Column: Leagues List and Selected League Standings -->
+    <div class="workspace-right">
+      <!-- Minhas Ligas List Card -->
+      <div class="glass-card list-view-card" style="margin-bottom: 2rem; max-height: 250px;">
+        <h3>Minhas Ligas ({{ leagues.length }})</h3>
+        
+        @if (isLoading) {
+          <div class="spinner-container">
+            <div class="spinner"></div>
+          </div>
+        } @else {
+          <div class="admin-list-container scrollable-list" style="max-height: 180px;">
+            @for (league of leagues; track league.id) {
+              <div 
+                class="admin-row-item cursor-pointer" 
+                [class.active-race-row]="selectedLeague?.id === league.id"
+                (click)="selectLeague(league)"
+              >
+                <div class="item-mini-avatar" style="background: rgba(255, 215, 0, 0.1); color: var(--color-gold);">
+                  🏆
+                </div>
+                <div class="item-mini-info">
+                  <h4>{{ league.name }}</h4>
+                  <p class="desc-preview">
+                    Código: <strong>{{ league.code }}</strong> • Prova: {{ league.race_name }} • Participantes: {{ league.members_count }}
+                  </p>
+                </div>
+                <div class="item-row-actions">
+                  <span class="text-gold" style="font-size: 1.2rem;">➔</span>
+                </div>
+              </div>
+            } @empty {
+              <p class="no-items-msg">Você não está participando de nenhuma liga ainda.</p>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Standing Leaderboard Detail Card -->
+      @if (selectedLeague) {
+        <div class="glass-card list-view-card animate-fade-in" style="flex-grow: 1;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; margin-bottom: 1rem;">
+            <div>
+              <h3 style="margin-bottom: 0.2rem;">Classificação: {{ selectedLeague.name }}</h3>
+              <p class="section-subtitle">
+                Prova: <strong style="color: var(--color-gold);">{{ selectedLeague.race_name }}</strong> • 
+                Criador: <strong>{{ selectedLeague.creator_email }}</strong>
+              </p>
+            </div>
+            <div style="text-align: right; background: rgba(0, 242, 254, 0.1); padding: 0.5rem 1rem; border-radius: 8px; border: 1px dashed var(--color-cyan);">
+              <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--color-cyan); display: block;">Código da Liga</span>
+              <strong style="font-size: 1.3rem; color: #fff; letter-spacing: 2px;">{{ selectedLeague.code }}</strong>
+            </div>
+          </div>
+
+          @if (isDetailsLoading) {
+            <div class="spinner-container">
+              <div class="spinner"></div>
+            </div>
+          } @else {
+            <div class="leaderboard-container scrollable-list" style="max-height: 400px; overflow-y: auto;">
+              @for (team of selectedLeagueStandings; track team.team_id; let index = $index) {
+                <div 
+                  class="admin-row-item" 
+                  [class.self-user]="team.user_email === authService.currentUser()?.email"
+                  style="padding: 0.8rem 1rem; margin-bottom: 0.8rem;"
+                >
+                  <!-- Rank Position Badge -->
+                  <div 
+                    class="rank-badge"
+                    [class.rank-1]="index === 0"
+                    [class.rank-2]="index === 1"
+                    [class.rank-3]="index === 2"
+                  >
+                    {{ index + 1 }}º
+                  </div>
+
+                  <!-- Jersey style icon -->
+                  <div class="jersey-mini-badge" [attr.data-jersey]="team.jersey_icon">
+                    👕
+                  </div>
+
+                  <!-- Team and Director Information -->
+                  <div class="item-mini-info" style="margin-left: 0.8rem;">
+                    <h4 style="margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                      {{ team.team_name }}
+                      @if (team.user_email === authService.currentUser()?.email) {
+                        <span class="user-badge self-badge" style="font-size: 0.7rem; padding: 0.1rem 0.4rem;">Sua Equipe</span>
+                      }
+                    </h4>
+                    <p class="desc-preview" style="margin: 0.2rem 0 0 0; font-size: 0.8rem;">
+                      Diretor: <strong>{{ team.sports_director }}</strong> • País: {{ team.country }}
+                    </p>
+                  </div>
+
+                  <!-- Score Points -->
+                  <div style="text-align: right; min-width: 80px;">
+                    <span style="font-size: 0.75rem; text-transform: uppercase; opacity: 0.6; display: block;">Pontos</span>
+                    <strong style="font-size: 1.15rem; color: var(--color-yellow);">{{ team.points }} pts</strong>
+                  </div>
+                </div>
+              } @empty {
+                <p class="no-items-msg">Nenhuma equipe participa desta liga ainda.</p>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

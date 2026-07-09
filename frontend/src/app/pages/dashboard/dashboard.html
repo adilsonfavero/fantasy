@@ -1,0 +1,114 @@
+<div class="dashboard-container animate-fade-in">
+  <div class="dashboard-header">
+    <h1>Painel do Treinador</h1>
+    <p>Escolha uma das Grandes Voltas abaixo para montar ou editar sua equipe dos sonhos.</p>
+  </div>
+
+  @if (errorMessage) {
+    <div class="alert alert-error">{{ errorMessage }}</div>
+  }
+
+  @if (isLoading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Carregando as provas...</p>
+    </div>
+  } @else {
+    <div class="races-grid">
+      @for (race of races; track race.id) {
+        @let team = getTeamForRace(race.id);
+        
+        <!-- Setup custom race styling class -->
+        <div class="race-card glass-card" [class]="'race-' + race.name.toLowerCase().replace(' ', '-').replace('\'', '')">
+          <div class="race-badge">GRAND TOUR</div>
+          
+          <div class="race-title-section">
+            <h2 class="race-name">{{ race.name }}</h2>
+            <span class="race-year">{{ race.year }}</span>
+          </div>
+          
+          <p class="race-desc">{{ race.description }}</p>
+
+          <div class="team-status-section">
+            @if (team) {
+              <div class="team-info-box">
+                <div class="team-jersey-preview">
+                  <div class="jersey-mini" [class]="team.jersey_icon">👕</div>
+                </div>
+                <div class="team-text-info">
+                  <h4 class="user-team-name">{{ team.team_name }}</h4>
+                  <p class="user-team-director">Dir: {{ team.sports_director }}</p>
+                  <p class="user-team-spent">
+                    💰 Orçamento: <strong class="text-success">{{ team.total_spent }}/1000</strong>
+                  </p>
+                </div>
+              </div>
+              <a [routerLink]="['/team-builder', race.id]" class="btn btn-primary btn-block-edit">
+                Editar Equipe ⚙️
+              </a>
+            } @else {
+              <div class="no-team-box">
+                <span class="status-icon">⚠️</span>
+                <p>Nenhuma equipe criada para esta prova ainda.</p>
+              </div>
+              <a [routerLink]="['/team-builder', race.id]" class="btn btn-primary btn-block-create">
+                Criar Equipe 🚴‍♂️
+              </a>
+            }
+            
+            <button 
+              (click)="viewStages(race)" 
+              class="btn btn-secondary btn-block-stages" 
+              style="margin-top: 0.5rem; width: 100%;"
+            >
+              Ver Etapas 📅
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Stages Slide-over Panel -->
+  @if (showStagesPanel) {
+    <div class="stages-overlay animate-fade-in" (click)="closeStages()">
+      <div class="stages-sidebar glass-card" (click)="$event.stopPropagation()">
+        <div class="stages-sidebar-header">
+          <h3>Etapas: {{ selectedStagesRaceName }}</h3>
+          <button class="btn-close-stages" (click)="closeStages()">✕</button>
+        </div>
+
+        @if (isStagesLoading) {
+          <div class="spinner-container" style="margin-top: 4rem;">
+            <div class="spinner"></div>
+          </div>
+        } @else {
+          <div class="stages-listscroll">
+            @for (stage of stages; track stage.id) {
+              <div class="stage-item-card">
+                <div class="stage-item-header">
+                  <div class="stage-num-badge">Etapa {{ stage.stage_number }}</div>
+                  <div class="stage-route-info">
+                    <h4>{{ stage.start_location }} ➔ {{ stage.end_location }}</h4>
+                    <div class="stage-meta-row">
+                      <span class="stage-meta-pill date-pill">📅 {{ stage.date }}</span>
+                      <span class="stage-meta-pill dist-pill">📏 {{ stage.distance_km }} km</span>
+                      <span class="stage-meta-pill type-pill" [attr.data-type]="stage.profile_type">⛰️ {{ stage.profile_type }}</span>
+                    </div>
+                  </div>
+                </div>
+                @if (stage.image_url) {
+                  <div class="stage-profile-img-container">
+                    <img [src]="stage.image_url" alt="Perfil do terreno da etapa" class="stage-profile-img" />
+                  </div>
+                }
+              </div>
+            } @empty {
+              <p class="no-items-msg">Nenhuma etapa cadastrada para esta prova.</p>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

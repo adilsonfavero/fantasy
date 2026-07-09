@@ -1,0 +1,30 @@
+<div class="bg-gradient-overlay"></div>
+
+<header class="navbar">
+  <a routerLink="/" class="nav-brand">
+    🏆 Grandes Voltas <span>Fantasy</span>
+  </a>
+
+  <nav class="nav-links">
+    @if (authService.currentUser(); as user) {
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
+      <a routerLink="/leagues" routerLinkActive="active" class="nav-link">Ligas</a>
+      
+      @if (user.isAdmin) {
+        <a routerLink="/admin" routerLinkActive="active" class="nav-link">Admin Sponsors</a>
+      }
+      
+      <span class="nav-link" style="color: var(--text-primary); cursor: default;">
+        👤 {{ user.email }}
+      </span>
+      <button (click)="logout()" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Sair</button>
+    } @else {
+      <a routerLink="/login" routerLinkActive="active" class="nav-link">Entrar</a>
+      <a routerLink="/register" class="btn btn-primary" style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">Cadastrar</a>
+    }
+  </nav>
+</header>
+
+<main>
+  <router-outlet></router-outlet>
+</main>

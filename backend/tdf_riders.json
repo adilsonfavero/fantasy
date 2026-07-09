@@ -1,0 +1,1106 @@
+[
+  {
+    "name": "Tadej Pogačar",
+    "nationality": "Outro",
+    "official_team": "UAE Team Emirates XRG",
+    "value": 450
+  },
+  {
+    "name": "João Almeida",
+    "nationality": "Outro",
+    "official_team": "UAE Team Emirates XRG",
+    "value": 260
+  },
+  {
+    "name": "Jhonatan Narváez",
+    "nationality": "Outro",
+    "official_team": "UAE Team Emirates XRG",
+    "value": 100
+  },
+  {
+    "name": "Nils Politt",
+    "nationality": "Outro",
+    "official_team": "UAE Team Emirates XRG",
+    "value": 160
+  },
+  {
+    "name": "Pavel Sivakov",
+    "nationality": "Outro",
+    "official_team": "UAE Team Emirates XRG",
+    "value": 150
+  },
+  {
+    "name": "Marc Soler",
+    "nationality": "Outro",
+    "official_team": "UAE Team Emirates XRG",
+    "value": 200
+  },
+  {
+    "name": "Tim Wellens",
+    "nationality": "Outro",
+    "official_team": "UAE Team Emirates XRG",
+    "value": 100
+  },
+  {
+    "name": "Adam Yates",
+    "nationality": "Outro",
+    "official_team": "UAE Team Emirates XRG",
+    "value": 250
+  },
+  {
+    "name": "Jonas Vingegaard",
+    "nationality": "Outro",
+    "official_team": "Visma–Lease a Bike",
+    "value": 420
+  },
+  {
+    "name": "Edoardo Affini",
+    "nationality": "Outro",
+    "official_team": "Visma–Lease a Bike",
+    "value": 170
+  },
+  {
+    "name": "Tiesj Benoot",
+    "nationality": "Outro",
+    "official_team": "Visma–Lease a Bike",
+    "value": 120
+  },
+  {
+    "name": "Victor Campenaerts",
+    "nationality": "Outro",
+    "official_team": "Visma–Lease a Bike",
+    "value": 120
+  },
+  {
+    "name": "Matteo Jorgenson",
+    "nationality": "Outro",
+    "official_team": "Visma–Lease a Bike",
+    "value": 240
+  },
+  {
+    "name": "Sepp Kuss",
+    "nationality": "Outro",
+    "official_team": "Visma–Lease a Bike",
+    "value": 260
+  },
+  {
+    "name": "Wout van Aert",
+    "nationality": "Outro",
+    "official_team": "Visma–Lease a Bike",
+    "value": 340
+  },
+  {
+    "name": "Simon Yates",
+    "nationality": "Outro",
+    "official_team": "Visma–Lease a Bike",
+    "value": 250
+  },
+  {
+    "name": "Remco Evenepoel",
+    "nationality": "Outro",
+    "official_team": "Soudal–Quick-Step",
+    "value": 400
+  },
+  {
+    "name": "Mattia Cattaneo",
+    "nationality": "Outro",
+    "official_team": "Soudal–Quick-Step",
+    "value": 170
+  },
+  {
+    "name": "Pascal Eenkhoorn",
+    "nationality": "Outro",
+    "official_team": "Soudal–Quick-Step",
+    "value": 210
+  },
+  {
+    "name": "Tim Merlier",
+    "nationality": "Outro",
+    "official_team": "Soudal–Quick-Step",
+    "value": 180
+  },
+  {
+    "name": "Valentin Paret-Peintre",
+    "nationality": "Outro",
+    "official_team": "Soudal–Quick-Step",
+    "value": 130
+  },
+  {
+    "name": "Maximilian Schachmann",
+    "nationality": "Outro",
+    "official_team": "Soudal–Quick-Step",
+    "value": 210
+  },
+  {
+    "name": "Bert Van Lerberghe",
+    "nationality": "Outro",
+    "official_team": "Soudal–Quick-Step",
+    "value": 200
+  },
+  {
+    "name": "Ilan Van Wilder",
+    "nationality": "Outro",
+    "official_team": "Soudal–Quick-Step",
+    "value": 180
+  },
+  {
+    "name": "Ben Healy",
+    "nationality": "Outro",
+    "official_team": "EF Education–EasyPost",
+    "value": 100
+  },
+  {
+    "name": "Vincenzo Albanese",
+    "nationality": "Outro",
+    "official_team": "EF Education–EasyPost",
+    "value": 190
+  },
+  {
+    "name": "Kasper Asgreen",
+    "nationality": "Outro",
+    "official_team": "EF Education–EasyPost",
+    "value": 130
+  },
+  {
+    "name": "Alex Baudin",
+    "nationality": "Outro",
+    "official_team": "EF Education–EasyPost",
+    "value": 210
+  },
+  {
+    "name": "Neilson Powless",
+    "nationality": "Outro",
+    "official_team": "EF Education–EasyPost",
+    "value": 170
+  },
+  {
+    "name": "Harry Sweeny",
+    "nationality": "Outro",
+    "official_team": "EF Education–EasyPost",
+    "value": 150
+  },
+  {
+    "name": "Michael Valgren",
+    "nationality": "Outro",
+    "official_team": "EF Education–EasyPost",
+    "value": 140
+  },
+  {
+    "name": "Marijn van den Berg",
+    "nationality": "Outro",
+    "official_team": "EF Education–EasyPost",
+    "value": 150
+  },
+  {
+    "name": "Biniam Girmay",
+    "nationality": "Outro",
+    "official_team": "Intermarché–Wanty",
+    "value": 220
+  },
+  {
+    "name": "Louis Barré",
+    "nationality": "Outro",
+    "official_team": "Intermarché–Wanty",
+    "value": 200
+  },
+  {
+    "name": "Vito Braet",
+    "nationality": "Outro",
+    "official_team": "Intermarché–Wanty",
+    "value": 200
+  },
+  {
+    "name": "Hugo Page",
+    "nationality": "Outro",
+    "official_team": "Intermarché–Wanty",
+    "value": 200
+  },
+  {
+    "name": "Laurenz Rex",
+    "nationality": "Outro",
+    "official_team": "Intermarché–Wanty",
+    "value": 180
+  },
+  {
+    "name": "Jonas Rutsch",
+    "nationality": "Outro",
+    "official_team": "Intermarché–Wanty",
+    "value": 180
+  },
+  {
+    "name": "Roel van Sintmaartensdijk",
+    "nationality": "Outro",
+    "official_team": "Intermarché–Wanty",
+    "value": 120
+  },
+  {
+    "name": "Georg Zimmermann",
+    "nationality": "Outro",
+    "official_team": "Intermarché–Wanty",
+    "value": 120
+  },
+  {
+    "name": "Santiago Buitrago",
+    "nationality": "Outro",
+    "official_team": "Team Bahrain Victorious",
+    "value": 110
+  },
+  {
+    "name": "Phil Bauhaus",
+    "nationality": "Outro",
+    "official_team": "Team Bahrain Victorious",
+    "value": 100
+  },
+  {
+    "name": "Kamil Gradek",
+    "nationality": "Outro",
+    "official_team": "Team Bahrain Victorious",
+    "value": 120
+  },
+  {
+    "name": "Jack Haig",
+    "nationality": "Outro",
+    "official_team": "Team Bahrain Victorious",
+    "value": 100
+  },
+  {
+    "name": "Lenny Martinez",
+    "nationality": "Outro",
+    "official_team": "Team Bahrain Victorious",
+    "value": 100
+  },
+  {
+    "name": "Matej Mohorič",
+    "nationality": "Outro",
+    "official_team": "Team Bahrain Victorious",
+    "value": 120
+  },
+  {
+    "name": "Robert Stannard",
+    "nationality": "Outro",
+    "official_team": "Team Bahrain Victorious",
+    "value": 110
+  },
+  {
+    "name": "Fred Wright",
+    "nationality": "Outro",
+    "official_team": "Team Bahrain Victorious",
+    "value": 200
+  },
+  {
+    "name": "Geraint Thomas",
+    "nationality": "Outro",
+    "official_team": "INEOS Grenadiers",
+    "value": 220
+  },
+  {
+    "name": "Thymen Arensman",
+    "nationality": "Outro",
+    "official_team": "INEOS Grenadiers",
+    "value": 100
+  },
+  {
+    "name": "Tobias Foss",
+    "nationality": "Outro",
+    "official_team": "INEOS Grenadiers",
+    "value": 210
+  },
+  {
+    "name": "Filippo Ganna",
+    "nationality": "Outro",
+    "official_team": "INEOS Grenadiers",
+    "value": 120
+  },
+  {
+    "name": "Axel Laurance",
+    "nationality": "Outro",
+    "official_team": "INEOS Grenadiers",
+    "value": 190
+  },
+  {
+    "name": "Carlos Rodríguez",
+    "nationality": "Outro",
+    "official_team": "INEOS Grenadiers",
+    "value": 240
+  },
+  {
+    "name": "Connor Swift",
+    "nationality": "Outro",
+    "official_team": "INEOS Grenadiers",
+    "value": 200
+  },
+  {
+    "name": "Samuel Watson",
+    "nationality": "Outro",
+    "official_team": "INEOS Grenadiers",
+    "value": 110
+  },
+  {
+    "name": "Primož Roglič",
+    "nationality": "Outro",
+    "official_team": "Red Bull–Bora–Hansgrohe",
+    "value": 350
+  },
+  {
+    "name": "Florian Lipowitz",
+    "nationality": "Outro",
+    "official_team": "Red Bull–Bora–Hansgrohe",
+    "value": 110
+  },
+  {
+    "name": "Jordi Meeus",
+    "nationality": "Outro",
+    "official_team": "Red Bull–Bora–Hansgrohe",
+    "value": 190
+  },
+  {
+    "name": "Gianni Moscon",
+    "nationality": "Outro",
+    "official_team": "Red Bull–Bora–Hansgrohe",
+    "value": 130
+  },
+  {
+    "name": "Laurence Pithie",
+    "nationality": "Outro",
+    "official_team": "Red Bull–Bora–Hansgrohe",
+    "value": 140
+  },
+  {
+    "name": "Mick van Dijke",
+    "nationality": "Outro",
+    "official_team": "Red Bull–Bora–Hansgrohe",
+    "value": 200
+  },
+  {
+    "name": "Danny van Poppel",
+    "nationality": "Outro",
+    "official_team": "Red Bull–Bora–Hansgrohe",
+    "value": 210
+  },
+  {
+    "name": "Aleksandr Vlasov",
+    "nationality": "Outro",
+    "official_team": "Red Bull–Bora–Hansgrohe",
+    "value": 200
+  },
+  {
+    "name": "Jonathan Milan",
+    "nationality": "Outro",
+    "official_team": "Lidl–Trek",
+    "value": 120
+  },
+  {
+    "name": "Simone Consonni",
+    "nationality": "Outro",
+    "official_team": "Lidl–Trek",
+    "value": 180
+  },
+  {
+    "name": "Thibau Nys",
+    "nationality": "Outro",
+    "official_team": "Lidl–Trek",
+    "value": 110
+  },
+  {
+    "name": "Quinn Simmons",
+    "nationality": "Outro",
+    "official_team": "Lidl–Trek",
+    "value": 110
+  },
+  {
+    "name": "Mattias Skjelmose",
+    "nationality": "Outro",
+    "official_team": "Lidl–Trek",
+    "value": 140
+  },
+  {
+    "name": "Toms Skujiņš",
+    "nationality": "Outro",
+    "official_team": "Lidl–Trek",
+    "value": 100
+  },
+  {
+    "name": "Jasper Stuyven",
+    "nationality": "Outro",
+    "official_team": "Lidl–Trek",
+    "value": 210
+  },
+  {
+    "name": "Edward Theuns",
+    "nationality": "Outro",
+    "official_team": "Lidl–Trek",
+    "value": 200
+  },
+  {
+    "name": "Guillaume Martin",
+    "nationality": "Outro",
+    "official_team": "Groupama–FDJ",
+    "value": 180
+  },
+  {
+    "name": "Lewis Askey",
+    "nationality": "Outro",
+    "official_team": "Groupama–FDJ",
+    "value": 150
+  },
+  {
+    "name": "Cyril Barthe",
+    "nationality": "Outro",
+    "official_team": "Groupama–FDJ",
+    "value": 150
+  },
+  {
+    "name": "Romain Grégoire",
+    "nationality": "Outro",
+    "official_team": "Groupama–FDJ",
+    "value": 180
+  },
+  {
+    "name": "Valentin Madouas",
+    "nationality": "Outro",
+    "official_team": "Groupama–FDJ",
+    "value": 110
+  },
+  {
+    "name": "Quentin Pacher",
+    "nationality": "Outro",
+    "official_team": "Groupama–FDJ",
+    "value": 190
+  },
+  {
+    "name": "Paul Penhoët",
+    "nationality": "Outro",
+    "official_team": "Groupama–FDJ",
+    "value": 210
+  },
+  {
+    "name": "Clément Russo",
+    "nationality": "Outro",
+    "official_team": "Groupama–FDJ",
+    "value": 200
+  },
+  {
+    "name": "Jasper Philipsen",
+    "nationality": "Outro",
+    "official_team": "Alpecin–Deceuninck",
+    "value": 300
+  },
+  {
+    "name": "Silvan Dillier",
+    "nationality": "Outro",
+    "official_team": "Alpecin–Deceuninck",
+    "value": 160
+  },
+  {
+    "name": "Kaden Groves",
+    "nationality": "Outro",
+    "official_team": "Alpecin–Deceuninck",
+    "value": 150
+  },
+  {
+    "name": "Xandro Meurisse",
+    "nationality": "Outro",
+    "official_team": "Alpecin–Deceuninck",
+    "value": 150
+  },
+  {
+    "name": "Jonas Rickaert",
+    "nationality": "Outro",
+    "official_team": "Alpecin–Deceuninck",
+    "value": 200
+  },
+  {
+    "name": "Mathieu van der Poel",
+    "nationality": "Outro",
+    "official_team": "Alpecin–Deceuninck",
+    "value": 380
+  },
+  {
+    "name": "Gianni Vermeersch",
+    "nationality": "Outro",
+    "official_team": "Alpecin–Deceuninck",
+    "value": 200
+  },
+  {
+    "name": "Emiel Verstrynge",
+    "nationality": "Outro",
+    "official_team": "Alpecin–Deceuninck",
+    "value": 150
+  },
+  {
+    "name": "Julian Alaphilippe",
+    "nationality": "Outro",
+    "official_team": "Tudor Pro Cycling Team",
+    "value": 120
+  },
+  {
+    "name": "Alberto Dainese",
+    "nationality": "Outro",
+    "official_team": "Tudor Pro Cycling Team",
+    "value": 100
+  },
+  {
+    "name": "Marco Haller",
+    "nationality": "Outro",
+    "official_team": "Tudor Pro Cycling Team",
+    "value": 100
+  },
+  {
+    "name": "Marc Hirschi",
+    "nationality": "Outro",
+    "official_team": "Tudor Pro Cycling Team",
+    "value": 110
+  },
+  {
+    "name": "Fabian Lienhard",
+    "nationality": "Outro",
+    "official_team": "Tudor Pro Cycling Team",
+    "value": 120
+  },
+  {
+    "name": "Marius Mayrhofer",
+    "nationality": "Outro",
+    "official_team": "Tudor Pro Cycling Team",
+    "value": 140
+  },
+  {
+    "name": "Michael Storer",
+    "nationality": "Outro",
+    "official_team": "Tudor Pro Cycling Team",
+    "value": 120
+  },
+  {
+    "name": "Matteo Trentin",
+    "nationality": "Outro",
+    "official_team": "Tudor Pro Cycling Team",
+    "value": 180
+  },
+  {
+    "name": "Ben O'Connor",
+    "nationality": "Outro",
+    "official_team": "Team Jayco–AlUla",
+    "value": 140
+  },
+  {
+    "name": "Eddie Dunbar",
+    "nationality": "Outro",
+    "official_team": "Team Jayco–AlUla",
+    "value": 130
+  },
+  {
+    "name": "Luke Durbridge",
+    "nationality": "Outro",
+    "official_team": "Team Jayco–AlUla",
+    "value": 130
+  },
+  {
+    "name": "Dylan Groenewegen",
+    "nationality": "Outro",
+    "official_team": "Team Jayco–AlUla",
+    "value": 120
+  },
+  {
+    "name": "Luka Mezgec",
+    "nationality": "Outro",
+    "official_team": "Team Jayco–AlUla",
+    "value": 180
+  },
+  {
+    "name": "Luke Plapp",
+    "nationality": "Outro",
+    "official_team": "Team Jayco–AlUla",
+    "value": 100
+  },
+  {
+    "name": "Elmar Reinders",
+    "nationality": "Outro",
+    "official_team": "Team Jayco–AlUla",
+    "value": 170
+  },
+  {
+    "name": "Mauro Schmid",
+    "nationality": "Outro",
+    "official_team": "Team Jayco–AlUla",
+    "value": 120
+  },
+  {
+    "name": "Kévin Vauquelin",
+    "nationality": "Outro",
+    "official_team": "Arkéa–B&amp;B Hotels",
+    "value": 190
+  },
+  {
+    "name": "Amaury Capiot",
+    "nationality": "Outro",
+    "official_team": "Arkéa–B&amp;B Hotels",
+    "value": 150
+  },
+  {
+    "name": "Ewen Costiou",
+    "nationality": "Outro",
+    "official_team": "Arkéa–B&amp;B Hotels",
+    "value": 170
+  },
+  {
+    "name": "Arnaud Démare",
+    "nationality": "Outro",
+    "official_team": "Arkéa–B&amp;B Hotels",
+    "value": 130
+  },
+  {
+    "name": "Raúl García Pierna",
+    "nationality": "Outro",
+    "official_team": "Arkéa–B&amp;B Hotels",
+    "value": 150
+  },
+  {
+    "name": "Mathis Le Berre",
+    "nationality": "Outro",
+    "official_team": "Arkéa–B&amp;B Hotels",
+    "value": 110
+  },
+  {
+    "name": "Cristián Rodríguez",
+    "nationality": "Outro",
+    "official_team": "Arkéa–B&amp;B Hotels",
+    "value": 100
+  },
+  {
+    "name": "Clément Venturini",
+    "nationality": "Outro",
+    "official_team": "Arkéa–B&amp;B Hotels",
+    "value": 140
+  },
+  {
+    "name": "Enric Mas",
+    "nationality": "Outro",
+    "official_team": "Movistar Team",
+    "value": 120
+  },
+  {
+    "name": "Will Barta",
+    "nationality": "Outro",
+    "official_team": "Movistar Team",
+    "value": 160
+  },
+  {
+    "name": "Pablo Castrillo",
+    "nationality": "Outro",
+    "official_team": "Movistar Team",
+    "value": 150
+  },
+  {
+    "name": "Nelson Oliveira",
+    "nationality": "Outro",
+    "official_team": "Movistar Team",
+    "value": 180
+  },
+  {
+    "name": "Iván García Cortina",
+    "nationality": "Outro",
+    "official_team": "Movistar Team",
+    "value": 130
+  },
+  {
+    "name": "Gregor Mühlberger",
+    "nationality": "Outro",
+    "official_team": "Movistar Team",
+    "value": 180
+  },
+  {
+    "name": "Iván Romeo",
+    "nationality": "Outro",
+    "official_team": "Movistar Team",
+    "value": 180
+  },
+  {
+    "name": "Einer Rubio",
+    "nationality": "Outro",
+    "official_team": "Movistar Team",
+    "value": 180
+  },
+  {
+    "name": "Felix Gall",
+    "nationality": "Outro",
+    "official_team": "Decathlon–AG2R La Mondiale",
+    "value": 200
+  },
+  {
+    "name": "Bruno Armirail",
+    "nationality": "Outro",
+    "official_team": "Decathlon–AG2R La Mondiale",
+    "value": 190
+  },
+  {
+    "name": "Clément Berthet",
+    "nationality": "Outro",
+    "official_team": "Decathlon–AG2R La Mondiale",
+    "value": 180
+  },
+  {
+    "name": "Stefan Bissegger",
+    "nationality": "Outro",
+    "official_team": "Decathlon–AG2R La Mondiale",
+    "value": 120
+  },
+  {
+    "name": "Oliver Naesen",
+    "nationality": "Outro",
+    "official_team": "Decathlon–AG2R La Mondiale",
+    "value": 130
+  },
+  {
+    "name": "Aurélien Paret-Peintre",
+    "nationality": "Outro",
+    "official_team": "Decathlon–AG2R La Mondiale",
+    "value": 110
+  },
+  {
+    "name": "Callum Scotson",
+    "nationality": "Outro",
+    "official_team": "Decathlon–AG2R La Mondiale",
+    "value": 130
+  },
+  {
+    "name": "Bastien Tronchon",
+    "nationality": "Outro",
+    "official_team": "Decathlon–AG2R La Mondiale",
+    "value": 210
+  },
+  {
+    "name": "Emanuel Buchmann",
+    "nationality": "Outro",
+    "official_team": "Cofidis",
+    "value": 210
+  },
+  {
+    "name": "Alex Aranburu",
+    "nationality": "Outro",
+    "official_team": "Cofidis",
+    "value": 200
+  },
+  {
+    "name": "Bryan Coquard",
+    "nationality": "Outro",
+    "official_team": "Cofidis",
+    "value": 110
+  },
+  {
+    "name": "Ion Izagirre",
+    "nationality": "Outro",
+    "official_team": "Cofidis",
+    "value": 150
+  },
+  {
+    "name": "Alexis Renard",
+    "nationality": "Outro",
+    "official_team": "Cofidis",
+    "value": 140
+  },
+  {
+    "name": "Dylan Teuns",
+    "nationality": "Outro",
+    "official_team": "Cofidis",
+    "value": 170
+  },
+  {
+    "name": "Benjamin Thomas",
+    "nationality": "Outro",
+    "official_team": "Cofidis",
+    "value": 100
+  },
+  {
+    "name": "Damien Touzé",
+    "nationality": "Outro",
+    "official_team": "Cofidis",
+    "value": 190
+  },
+  {
+    "name": "Harold Tejada",
+    "nationality": "Outro",
+    "official_team": "XDS Astana Team",
+    "value": 130
+  },
+  {
+    "name": "Davide Ballerini",
+    "nationality": "Outro",
+    "official_team": "XDS Astana Team",
+    "value": 110
+  },
+  {
+    "name": "Cees Bol",
+    "nationality": "Outro",
+    "official_team": "XDS Astana Team",
+    "value": 210
+  },
+  {
+    "name": "Clément Champoussin",
+    "nationality": "Outro",
+    "official_team": "XDS Astana Team",
+    "value": 100
+  },
+  {
+    "name": "Yevgeniy Fedorov",
+    "nationality": "Outro",
+    "official_team": "XDS Astana Team",
+    "value": 130
+  },
+  {
+    "name": "Sergio Higuita",
+    "nationality": "Outro",
+    "official_team": "XDS Astana Team",
+    "value": 100
+  },
+  {
+    "name": "Mike Teunissen",
+    "nationality": "Outro",
+    "official_team": "XDS Astana Team",
+    "value": 200
+  },
+  {
+    "name": "Simone Velasco",
+    "nationality": "Outro",
+    "official_team": "XDS Astana Team",
+    "value": 200
+  },
+  {
+    "name": "Steff Cras",
+    "nationality": "Outro",
+    "official_team": "Team TotalEnergies",
+    "value": 150
+  },
+  {
+    "name": "Mathieu Burgaudeau",
+    "nationality": "Outro",
+    "official_team": "Team TotalEnergies",
+    "value": 140
+  },
+  {
+    "name": "Alexandre Delettre",
+    "nationality": "Outro",
+    "official_team": "Team TotalEnergies",
+    "value": 110
+  },
+  {
+    "name": "Thomas Gachignard",
+    "nationality": "Outro",
+    "official_team": "Team TotalEnergies",
+    "value": 120
+  },
+  {
+    "name": "Emilien Jeannière",
+    "nationality": "Outro",
+    "official_team": "Team TotalEnergies",
+    "value": 150
+  },
+  {
+    "name": "Jordan Jegat",
+    "nationality": "Outro",
+    "official_team": "Team TotalEnergies",
+    "value": 190
+  },
+  {
+    "name": "Anthony Turgis",
+    "nationality": "Outro",
+    "official_team": "Team TotalEnergies",
+    "value": 170
+  },
+  {
+    "name": "Mattéo Vercher",
+    "nationality": "Outro",
+    "official_team": "Team TotalEnergies",
+    "value": 150
+  },
+  {
+    "name": "Oscar Onley",
+    "nationality": "Outro",
+    "official_team": "Team Picnic–PostNL",
+    "value": 190
+  },
+  {
+    "name": "Warren Barguil",
+    "nationality": "Outro",
+    "official_team": "Team Picnic–PostNL",
+    "value": 150
+  },
+  {
+    "name": "Pavel Bittner",
+    "nationality": "Outro",
+    "official_team": "Team Picnic–PostNL",
+    "value": 140
+  },
+  {
+    "name": "Sean Flynn",
+    "nationality": "Outro",
+    "official_team": "Team Picnic–PostNL",
+    "value": 200
+  },
+  {
+    "name": "Tobias Lund Andresen",
+    "nationality": "Outro",
+    "official_team": "Team Picnic–PostNL",
+    "value": 170
+  },
+  {
+    "name": "Niklas Märkl",
+    "nationality": "Outro",
+    "official_team": "Team Picnic–PostNL",
+    "value": 200
+  },
+  {
+    "name": "Tim Naberman",
+    "nationality": "Outro",
+    "official_team": "Team Picnic–PostNL",
+    "value": 160
+  },
+  {
+    "name": "Frank van den Broek",
+    "nationality": "Outro",
+    "official_team": "Team Picnic–PostNL",
+    "value": 170
+  },
+  {
+    "name": "Michael Woods",
+    "nationality": "Outro",
+    "official_team": "Israel–Premier Tech",
+    "value": 150
+  },
+  {
+    "name": "Pascal Ackermann",
+    "nationality": "Outro",
+    "official_team": "Israel–Premier Tech",
+    "value": 160
+  },
+  {
+    "name": "Joseph Blackmore",
+    "nationality": "Outro",
+    "official_team": "Israel–Premier Tech",
+    "value": 110
+  },
+  {
+    "name": "Guillaume Boivin",
+    "nationality": "Outro",
+    "official_team": "Israel–Premier Tech",
+    "value": 140
+  },
+  {
+    "name": "Matis Louvel",
+    "nationality": "Outro",
+    "official_team": "Israel–Premier Tech",
+    "value": 170
+  },
+  {
+    "name": "Alexey Lutsenko",
+    "nationality": "Outro",
+    "official_team": "Israel–Premier Tech",
+    "value": 190
+  },
+  {
+    "name": "Krists Neilands",
+    "nationality": "Outro",
+    "official_team": "Israel–Premier Tech",
+    "value": 120
+  },
+  {
+    "name": "Jake Stewart",
+    "nationality": "Outro",
+    "official_team": "Israel–Premier Tech",
+    "value": 170
+  },
+  {
+    "name": "Arnaud De Lie",
+    "nationality": "Outro",
+    "official_team": "Lotto",
+    "value": 120
+  },
+  {
+    "name": "Jenno Berckmoes",
+    "nationality": "Outro",
+    "official_team": "Lotto",
+    "value": 170
+  },
+  {
+    "name": "Jasper De Buyst",
+    "nationality": "Outro",
+    "official_team": "Lotto",
+    "value": 130
+  },
+  {
+    "name": "Jarrad Drizners",
+    "nationality": "Outro",
+    "official_team": "Lotto",
+    "value": 190
+  },
+  {
+    "name": "Sébastien Grignard",
+    "nationality": "Outro",
+    "official_team": "Lotto",
+    "value": 120
+  },
+  {
+    "name": "Eduardo Sepúlveda",
+    "nationality": "Outro",
+    "official_team": "Lotto",
+    "value": 160
+  },
+  {
+    "name": "Lennert Van Eetvelt",
+    "nationality": "Outro",
+    "official_team": "Lotto",
+    "value": 140
+  },
+  {
+    "name": "Brent Van Moer",
+    "nationality": "Outro",
+    "official_team": "Lotto",
+    "value": 190
+  },
+  {
+    "name": "Tobias Halland Johannessen",
+    "nationality": "Outro",
+    "official_team": "Uno-X Mobility",
+    "value": 200
+  },
+  {
+    "name": "Jonas Abrahamsen",
+    "nationality": "Outro",
+    "official_team": "Uno-X Mobility",
+    "value": 130
+  },
+  {
+    "name": "Magnus Cort",
+    "nationality": "Outro",
+    "official_team": "Uno-X Mobility",
+    "value": 190
+  },
+  {
+    "name": "Stian Fredheim",
+    "nationality": "Outro",
+    "official_team": "Uno-X Mobility",
+    "value": 210
+  },
+  {
+    "name": "Markus Hoelgaard",
+    "nationality": "Outro",
+    "official_team": "Uno-X Mobility",
+    "value": 160
+  },
+  {
+    "name": "Anders Halland Johannessen",
+    "nationality": "Outro",
+    "official_team": "Uno-X Mobility",
+    "value": 210
+  },
+  {
+    "name": "Andreas Leknessund",
+    "nationality": "Outro",
+    "official_team": "Uno-X Mobility",
+    "value": 200
+  },
+  {
+    "name": "Søren Wærenskjold",
+    "nationality": "Outro",
+    "official_team": "Uno-X Mobility",
+    "value": 210
+  }
+]

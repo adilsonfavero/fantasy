@@ -1,0 +1,85 @@
+<div class="auth-container animate-fade-in">
+  <div class="auth-card glass-card">
+    <div class="auth-header">
+      <span class="auth-icon">🏆</span>
+      <h2>Criar sua Conta</h2>
+      <p>Cadastre-se para montar sua equipe e competir</p>
+    </div>
+
+    @if (errorMessage) {
+      <div class="alert alert-error">
+        ⚠️ {{ errorMessage }}
+      </div>
+    }
+
+    <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+      <div class="form-group">
+        <label for="email" class="form-label">E-mail</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          class="form-control" 
+          [(ngModel)]="email" 
+          required 
+          email 
+          #emailInput="ngModel"
+          placeholder="Ex: seuemail@provedor.com"
+        />
+        @if (emailInput.invalid && (emailInput.dirty || emailInput.touched)) {
+          <span class="field-error">Digite um e-mail válido.</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Senha</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          class="form-control" 
+          [(ngModel)]="password" 
+          required 
+          minlength="6"
+          #passwordInput="ngModel"
+          placeholder="Crie uma senha (mínimo 6 caracteres)"
+        />
+        @if (passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)) {
+          <span class="field-error">A senha deve ter no mínimo 6 caracteres.</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword" class="form-label">Confirmar Senha</label>
+        <input 
+          type="password" 
+          id="confirmPassword" 
+          name="confirmPassword" 
+          class="form-control" 
+          [(ngModel)]="confirmPassword" 
+          required 
+          placeholder="Confirme sua senha"
+        />
+        @if (confirmPassword !== password && confirmPassword.length > 0) {
+          <span class="field-error">As senhas não coincidem.</span>
+        }
+      </div>
+
+      <button 
+        type="submit" 
+        class="btn btn-primary btn-block" 
+        [disabled]="registerForm.invalid || password !== confirmPassword || isSubmitting()"
+      >
+        @if (isSubmitting()) {
+          Cadastrando...
+        } @else {
+          Cadastrar e Começar
+        }
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      Já possui uma conta? <a routerLink="/login" class="auth-link">Entrar</a>
+    </div>
+  </div>
+</div>

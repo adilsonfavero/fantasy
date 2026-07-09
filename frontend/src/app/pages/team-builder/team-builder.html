@@ -1,0 +1,259 @@
+<div class="builder-container animate-fade-in">
+  @if (isLoading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Carregando mercado de atletas...</p>
+    </div>
+  } @else {
+    <!-- Header -->
+    <div class="builder-header">
+      <div class="header-nav">
+        <a routerLink="/dashboard" class="back-link">← Voltar ao Dashboard</a>
+      </div>
+      <h1>Montar Equipe: <span class="text-gold">{{ race?.name }}</span></h1>
+      <p>Configure os detalhes do seu time e monte seu elenco de 8 atletas respeitando o teto de 1000 créditos.</p>
+    </div>
+
+    <!-- Alert Notifications -->
+    @if (errorMessage) {
+      <div class="alert alert-error">⚠️ {{ errorMessage }}</div>
+    }
+    @if (successMessage) {
+      <div class="alert alert-success">✅ {{ successMessage }}</div>
+    }
+
+    <!-- Main Workspace Split -->
+    <div class="builder-workspace">
+      
+      <!-- Left Column: Form & Selected Squad -->
+      <div class="workspace-left">
+        
+        <!-- Section 1: Team Metadata -->
+        <div class="glass-card config-card">
+          <h3>1. Detalhes da Equipe</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="tName" class="form-label">Nome da Equipe</label>
+              <input 
+                type="text" 
+                id="tName" 
+                class="form-control" 
+                [ngModel]="teamName()" 
+                (ngModelChange)="teamName.set($event)" 
+                placeholder="Ex: Pedal Voador"
+              />
+            </div>
+            
+            <div class="form-group">
+              <label for="sDirector" class="form-label">Diretor Esportivo</label>
+              <input 
+                type="text" 
+                id="sDirector" 
+                class="form-control" 
+                [ngModel]="sportsDirector()" 
+                (ngModelChange)="sportsDirector.set($event)" 
+                placeholder="Ex: Bernard Hinault"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="originCountry" class="form-label">País de Origem</label>
+              <input 
+                type="text" 
+                id="originCountry" 
+                class="form-control" 
+                [ngModel]="country()" 
+                (ngModelChange)="country.set($event)" 
+                placeholder="Ex: Brasil"
+              />
+            </div>
+          </div>
+
+          <!-- Jersey Selector -->
+          <div class="jersey-selection-area">
+            <label class="form-label">Escolha a Camisa</label>
+            <div class="jersey-grid">
+              @for (jersey of jerseys; track jersey.id) {
+                <button 
+                  type="button" 
+                  class="jersey-btn" 
+                  [class.active]="selectedJersey() === jersey.id"
+                  [class]="jersey.class"
+                  (click)="selectedJersey.set(jersey.id)"
+                  [title]="jersey.name"
+                >
+                  <span class="j-icon">👕</span>
+                  <span class="j-name">{{ jersey.name }}</span>
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Budget Tracker & Save Action -->
+        <div class="glass-card status-card">
+          <div class="status-summary">
+            <div class="metric">
+              <span class="metric-label">ATLETAS</span>
+              <span class="metric-value" [class.text-success]="athleteCount() === 8" [class.text-error]="athleteCount() > 8">
+                {{ athleteCount() }}/8
+              </span>
+            </div>
+            
+            <div class="metric">
+              <span class="metric-label">TOTAL GASTO</span>
+              <span class="metric-value" [class.text-error]="isBudgetExceeded()">
+                💰 {{ totalSpent() }}
+              </span>
+            </div>
+
+            <div class="metric">
+              <span class="metric-label">SALDO DISPONÍVEL</span>
+              <span class="metric-value" [class.text-error]="isBudgetExceeded()" [class.text-success]="!isBudgetExceeded() && budgetRemaining() >= 0">
+                💰 {{ budgetRemaining() }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Progress bar -->
+          <div class="budget-bar-container">
+            <div 
+              class="budget-bar-fill" 
+              [style.width.%]="(totalSpent() / 1000) * 100 > 100 ? 100 : (totalSpent() / 1000) * 100"
+              [class.bg-danger]="isBudgetExceeded()"
+            ></div>
+          </div>
+
+          @if (isBudgetExceeded()) {
+            <p class="validation-warning text-error">🚨 Orçamento estourado! Remova ciclistas de alto valor para economizar.</p>
+          } @else if (athleteCount() < 8) {
+            <p class="validation-warning text-pink">👉 Selecione mais {{ 8 - athleteCount() }} atleta(s) no mercado à direita.</p>
+          } @else if (athleteCount() === 8 && !isBudgetExceeded()) {
+            <p class="validation-warning text-success">🎯 Equipe completa e dentro do orçamento! Pronto para salvar.</p>
+          }
+
+          <button 
+            (click)="saveTeam()" 
+            class="btn btn-primary btn-block-save"
+            [disabled]="!isTeamValid() || isSaving()"
+          >
+            @if (isSaving()) {
+              Salvando Equipe...
+            } @else {
+              Salvar Equipe 💾
+            }
+          </button>
+        </div>
+
+        <!-- Section 3: Selected Squad List -->
+        <div class="glass-card squad-card">
+          <h3>2. Seu Elenco Escolhido</h3>
+          
+          <div class="squad-slots-list">
+            @for (i of [0, 1, 2, 3, 4, 5, 6, 7]; track i) {
+              @let athlete = selectedAthletes()[i];
+              
+              @if (athlete) {
+                <div class="squad-rider-row">
+                  <div class="rider-avatar">🚴‍♂️</div>
+                  <div class="rider-info-main">
+                    <h4>{{ athlete.name }}</h4>
+                    <p>{{ athlete.nationality }} • {{ athlete.official_team }}</p>
+                  </div>
+                  <div class="rider-info-cost">
+                    <span>💰 {{ athlete.value }}</span>
+                    <button (click)="removeAthlete(athlete.id)" class="btn-remove-rider" title="Remover atleta">×</button>
+                  </div>
+                </div>
+              } @else {
+                <div class="squad-rider-row-placeholder">
+                  <span class="p-num">#{{ i + 1 }}</span>
+                  <p>Vago — Adicione um atleta do mercado</p>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Athlete Market Selection -->
+      <div class="workspace-right">
+        <div class="glass-card market-card">
+          <div class="market-header">
+            <h3>3. Mercado de Atletas</h3>
+            <p>Selecione os melhores ciclistas para compor sua equipe.</p>
+          </div>
+
+          <!-- Market Filters -->
+          <div class="market-filters">
+            <input 
+              type="text" 
+              class="form-control filter-search" 
+              placeholder="Buscar ciclista ou nacionalidade..."
+              [ngModel]="searchTerm()"
+              (ngModelChange)="searchTerm.set($event)"
+            />
+            
+            <div class="filter-dropdowns">
+              <select 
+                class="form-control filter-select" 
+                [ngModel]="selectedTeamFilter()" 
+                (ngModelChange)="selectedTeamFilter.set($event)"
+              >
+                <option value="">Todas as Equipes Oficiais</option>
+                @for (teamName of officialTeams(); track teamName) {
+                  <option [value]="teamName">{{ teamName }}</option>
+                }
+              </select>
+
+              <select 
+                class="form-control filter-select" 
+                [ngModel]="sortBy()" 
+                (ngModelChange)="sortBy.set($event)"
+              >
+                <option value="value-desc">Maior Preço 💰</option>
+                <option value="value-asc">Menor Preço 💰</option>
+                <option value="name-asc">Nome (A-Z) 🔤</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Athletes Grid/List -->
+          <div class="market-athletes-list">
+            @for (athlete of filteredAthletes(); track athlete.id) {
+              @let isSelected = isAthleteSelected(athlete.id);
+              
+              <div class="market-athlete-card" [class.selected]="isSelected" (click)="toggleAthlete(athlete)">
+                <div class="athlete-main-info">
+                  <div class="athlete-flag-name">
+                    <span class="flag-icon">🏁</span>
+                    <div>
+                      <h4 class="athlete-name">{{ athlete.name }}</h4>
+                      <p class="athlete-sub">{{ athlete.nationality }} • {{ athlete.official_team }}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="athlete-market-actions">
+                  <span class="athlete-cost">💰 {{ athlete.value }}</span>
+                  <button 
+                    type="button" 
+                    class="btn-select-athlete" 
+                    [class.btn-selected]="isSelected"
+                  >
+                    {{ isSelected ? '✓' : '+' }}
+                  </button>
+                </div>
+              </div>
+            } @empty {
+              <div class="no-athletes-found">
+                <p>Nenhum ciclista encontrado com os filtros informados.</p>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+    </div>
+  }
+</div>

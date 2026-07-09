@@ -1,0 +1,68 @@
+<div class="auth-container animate-fade-in">
+  <div class="auth-card glass-card">
+    <div class="auth-header">
+      <span class="auth-icon">🚴‍♂️</span>
+      <h2>Acessar sua Conta</h2>
+      <p>Entre para montar e gerenciar seus ciclistas</p>
+    </div>
+
+    @if (errorMessage) {
+      <div class="alert alert-error">
+        ⚠️ {{ errorMessage }}
+      </div>
+    }
+
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+      <div class="form-group">
+        <label for="email" class="form-label">E-mail</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          class="form-control" 
+          [(ngModel)]="email" 
+          required 
+          email 
+          #emailInput="ngModel"
+          placeholder="Ex: seuemail@provedor.com"
+        />
+        @if (emailInput.invalid && (emailInput.dirty || emailInput.touched)) {
+          <span class="field-error">Digite um e-mail válido.</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Senha</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          class="form-control" 
+          [(ngModel)]="password" 
+          required 
+          #passwordInput="ngModel"
+          placeholder="Digite sua senha"
+        />
+        @if (passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)) {
+          <span class="field-error">A senha é obrigatória.</span>
+        }
+      </div>
+
+      <button 
+        type="submit" 
+        class="btn btn-primary btn-block" 
+        [disabled]="loginForm.invalid || isSubmitting()"
+      >
+        @if (isSubmitting()) {
+          Entrando...
+        } @else {
+          Entrar no Sistema
+        }
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      Não tem uma conta? <a routerLink="/register" class="auth-link">Cadastre-se</a>
+    </div>
+  </div>
+</div>

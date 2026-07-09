@@ -1,0 +1,428 @@
+<div class="admin-container animate-fade-in">
+  <div class="admin-header">
+    <h1>Painel de Administração</h1>
+    <p>Cadastre e gerencie marcas patrocinadoras, atualize a lista de atletas de cada evento ou gerencie contas de usuários.</p>
+  </div>
+
+  <!-- Tab Selector Header -->
+  <div class="admin-tabs">
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab() === 'sponsors'"
+      (click)="setTab('sponsors')"
+    >
+      🏢 Patrocinadores
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab() === 'athletes'"
+      (click)="setTab('athletes')"
+    >
+      🚴‍♂️ Atletas por Evento
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab() === 'users'"
+      (click)="setTab('users')"
+    >
+      👥 Usuários
+    </button>
+  </div>
+
+  <!-- Notifications -->
+  @if (errorMessage) {
+    <div class="alert alert-error">⚠️ {{ errorMessage }}</div>
+  }
+  @if (successMessage) {
+    <div class="alert alert-success">✅ {{ successMessage }}</div>
+  }
+
+  <!-- Tab 1: Sponsors -->
+  @if (activeTab() === 'sponsors') {
+    <div class="admin-workspace">
+      <!-- Left Column: Create Sponsor Form -->
+      <div class="workspace-left">
+        <div class="glass-card form-card">
+          <h3>Cadastrar Novo Patrocinador</h3>
+          
+          <form (ngSubmit)="onSubmitSponsor()" #sponsorForm="ngForm">
+            <div class="form-group">
+              <label for="spName" class="form-label">Nome da Empresa</label>
+              <input 
+                type="text" 
+                id="spName" 
+                name="spName"
+                class="form-control" 
+                [(ngModel)]="name" 
+                required
+                placeholder="Ex: Shimano"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="spLogo" class="form-label">URL do Logo (Imagem)</label>
+              <input 
+                type="url" 
+                id="spLogo" 
+                name="spLogo"
+                class="form-control" 
+                [(ngModel)]="logoUrl" 
+                placeholder="Ex: https://dominio.com/logo.png"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="spWebsite" class="form-label">Website Oficial</label>
+              <input 
+                type="url" 
+                id="spWebsite" 
+                name="spWebsite"
+                class="form-control" 
+                [(ngModel)]="websiteUrl" 
+                placeholder="Ex: https://shimano.com"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="spDesc" class="form-label">Descrição</label>
+              <textarea 
+                id="spDesc" 
+                name="spDesc"
+                class="form-control" 
+                rows="4"
+                [(ngModel)]="description" 
+                required
+                placeholder="Descreva o patrocínio ou detalhes da marca..."
+              ></textarea>
+            </div>
+
+            <button 
+              type="submit" 
+              class="btn btn-primary btn-block-save"
+              [disabled]="sponsorForm.invalid || isSubmitting()"
+            >
+              @if (isSubmitting()) {
+                Cadastrando...
+              } @else {
+                Cadastrar Patrocinador 🏢
+              }
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Column: Sponsors Grid -->
+      <div class="workspace-right">
+        <div class="glass-card list-view-card">
+          <h3>Sponsors Atuais</h3>
+          
+          @if (isLoading) {
+            <div class="spinner-container">
+              <div class="spinner"></div>
+            </div>
+          } @else {
+            <div class="admin-list-container">
+              @for (sponsor of sponsors; track sponsor.id) {
+                <div class="admin-row-item">
+                  <div class="item-mini-logo">
+                    @if (sponsor.logo_url) {
+                      <img [src]="sponsor.logo_url" [alt]="sponsor.name" />
+                    } @else {
+                      <span>🏢</span>
+                    }
+                  </div>
+                  <div class="item-mini-info">
+                    <h4>{{ sponsor.name }}</h4>
+                    <p class="desc-preview">{{ sponsor.description }}</p>
+                  </div>
+                  @if (sponsor.id) {
+                    <button (click)="deleteSponsor(sponsor.id)" class="btn-action-delete" title="Excluir patrocinador">
+                      🗑️
+                    </button>
+                  }
+                </div>
+              } @empty {
+                <p class="no-items-msg">Nenhum patrocinador cadastrado ainda.</p>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Tab 2: Athletes -->
+  @if (activeTab() === 'athletes') {
+    <div class="athletes-admin-workspace">
+      <!-- Race Selector Dropdown -->
+      <div class="glass-card selector-card">
+        <label for="raceSelect" class="form-label" style="display:inline-block; margin-right:1rem; font-weight:600;">
+          Selecione a Prova/Evento:
+        </label>
+        <select 
+          id="raceSelect" 
+          class="form-control event-select-dropdown" 
+          [value]="selectedRaceId()" 
+          (change)="onRaceChange($event)"
+        >
+          @for (race of races; track race.id) {
+            <option [value]="race.id">{{ race.name }} ({{ race.year }})</option>
+          }
+        </select>
+      </div>
+
+      <!-- Athletes CRUD Content -->
+      <div class="admin-workspace">
+        
+        <!-- Left: Athlete Form -->
+        <div class="workspace-left">
+          <div class="glass-card form-card">
+            <h3>{{ editingAthleteId() ? 'Editar Atleta' : 'Cadastrar Novo Atleta' }}</h3>
+            
+            <form (ngSubmit)="onSubmitAthlete()" #athleteForm="ngForm">
+              <div class="form-group">
+                <label for="athName" class="form-label">Nome do Ciclista</label>
+                <input 
+                  type="text" 
+                  id="athName" 
+                  name="athName"
+                  class="form-control" 
+                  [(ngModel)]="athleteName" 
+                  required
+                  placeholder="Ex: Wout van Aert"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="athNationality" class="form-label">Nacionalidade</label>
+                <input 
+                  type="text" 
+                  id="athNationality" 
+                  name="athNationality"
+                  class="form-control" 
+                  [(ngModel)]="athleteNationality" 
+                  required
+                  placeholder="Ex: Bélgica"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="athTeam" class="form-label">Equipe Oficial (Real)</label>
+                <input 
+                  type="text" 
+                  id="athTeam" 
+                  name="athTeam"
+                  class="form-control" 
+                  [(ngModel)]="athleteTeam" 
+                  required
+                  placeholder="Ex: Team Visma | Lease a Bike"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="athValue" class="form-label">Valor / Preço de Compra (Créditos)</label>
+                <input 
+                  type="number" 
+                  id="athValue" 
+                  name="athValue"
+                  class="form-control" 
+                  [(ngModel)]="athleteValue" 
+                  required
+                  min="10"
+                  max="1000"
+                  placeholder="Ex: 250"
+                />
+              </div>
+
+              <div class="form-actions-row">
+                <button 
+                  type="submit" 
+                  class="btn btn-primary" 
+                  [class.btn-block-save]="!editingAthleteId()"
+                  [disabled]="athleteForm.invalid || isSubmitting()"
+                >
+                  @if (editingAthleteId()) {
+                    Salvar Alterações 💾
+                  } @else {
+                    Cadastrar Atleta 🚴‍♂️
+                  }
+                </button>
+                
+                @if (editingAthleteId()) {
+                  <button 
+                    type="button" 
+                    class="btn btn-secondary" 
+                    (click)="cancelEditAthlete()"
+                  >
+                    Cancelar
+                  </button>
+                }
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right: Athletes list -->
+        <div class="workspace-right">
+          <div class="glass-card list-view-card">
+            <h3>Ciclistas do Evento (Total: {{ athletes.length }})</h3>
+            
+            @if (isLoading) {
+              <div class="spinner-container">
+                <div class="spinner"></div>
+              </div>
+            } @else {
+              <div class="admin-list-container scrollable-list">
+                @for (athlete of athletes; track athlete.id) {
+                  <div class="admin-row-item">
+                    <div class="item-mini-avatar">🚴‍♂️</div>
+                    <div class="item-mini-info">
+                      <h4>{{ athlete.name }}</h4>
+                      <p class="desc-preview">
+                        {{ athlete.nationality }} • {{ athlete.official_team }} • <strong>💰 {{ athlete.value }}</strong>
+                      </p>
+                    </div>
+                    
+                    <div class="item-row-actions">
+                      <button 
+                        (click)="startEditAthlete(athlete)" 
+                        class="btn-action-edit" 
+                        title="Editar atleta"
+                      >
+                        ✏️
+                      </button>
+                      <button 
+                        (click)="deleteAthlete(athlete.id)" 
+                        class="btn-action-delete" 
+                        title="Excluir atleta"
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
+                } @empty {
+                  <p class="no-items-msg">Nenhum ciclista cadastrado para este evento ainda.</p>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+      </div>
+    </div>
+  }
+
+  <!-- Tab 3: Users -->
+  @if (activeTab() === 'users') {
+    <div class="admin-workspace animate-fade-in">
+      <!-- Left Column: Create Admin User Form -->
+      <div class="workspace-left">
+        <div class="glass-card form-card">
+          <h3>Cadastrar Novo Administrador</h3>
+          
+          <form (ngSubmit)="onSubmitAdmin()" #adminForm="ngForm">
+            <div class="form-group">
+              <label for="adEmail" class="form-label">E-mail do Administrador</label>
+              <input 
+                type="email" 
+                id="adEmail" 
+                name="adEmail"
+                class="form-control" 
+                [(ngModel)]="adminEmail" 
+                required
+                email
+                placeholder="Ex: diretor@fantasy.com"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="adPassword" class="form-label">Senha Provisória</label>
+              <input 
+                type="password" 
+                id="adPassword" 
+                name="adPassword"
+                class="form-control" 
+                [(ngModel)]="adminPassword" 
+                required
+                minlength="6"
+                placeholder="Mínimo 6 caracteres"
+              />
+            </div>
+
+            <button 
+              type="submit" 
+              class="btn btn-primary btn-block-save"
+              [disabled]="adminForm.invalid || isSubmitting()"
+            >
+              @if (isSubmitting()) {
+                Cadastrando...
+              } @else {
+                Criar Administrador 🛡️
+              }
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Column: Users List -->
+      <div class="workspace-right">
+        <div class="glass-card list-view-card">
+          <h3>Gerenciar Usuários (Total: {{ users.length }})</h3>
+          
+          @if (isLoading) {
+            <div class="spinner-container">
+              <div class="spinner"></div>
+            </div>
+          } @else {
+            <div class="admin-list-container scrollable-list">
+              @for (user of users; track user.id) {
+                <div class="admin-row-item" [class.self-user]="user.id === authService.currentUser()?.id">
+                  <div class="item-mini-avatar" [class.admin-avatar]="user.is_admin">
+                    {{ user.is_admin ? '🛡️' : '🚴' }}
+                  </div>
+                  <div class="item-mini-info">
+                    <h4>
+                      {{ user.email }}
+                      @if (user.id === authService.currentUser()?.id) {
+                        <span class="user-badge self-badge">Você</span>
+                      }
+                    </h4>
+                    <p class="desc-preview">
+                      ID: #{{ user.id }} • 
+                      @if (user.is_admin) {
+                        <strong class="text-gold" style="color:var(--color-gold);">Administrador</strong>
+                      } @else {
+                        <span>Membro</span>
+                      }
+                    </p>
+                  </div>
+                  
+                  <div class="item-row-actions">
+                    <button 
+                      (click)="toggleUserAdmin(user)" 
+                      class="btn-action-edit"
+                      [disabled]="user.id === authService.currentUser()?.id"
+                      [title]="user.is_admin ? 'Rebaixar para Membro' : 'Promover a Administrador'"
+                    >
+                      👑
+                    </button>
+                    <button 
+                      (click)="deleteUser(user)" 
+                      class="btn-action-delete"
+                      [disabled]="user.id === authService.currentUser()?.id"
+                      title="Excluir Usuário"
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </div>
+              } @empty {
+                <p class="no-items-msg">Nenhum usuário cadastrado.</p>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

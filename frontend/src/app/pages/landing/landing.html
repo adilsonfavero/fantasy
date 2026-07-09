@@ -1,0 +1,90 @@
+<div class="landing-container animate-fade-in">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <span class="badge">TEMPORADA 2026</span>
+      <h1 class="hero-title">Monte sua Equipe Lendária dos <span class="highlight">Grandes Voltas</span></h1>
+      <p class="hero-subtitle">
+        Entre no mundo do ciclismo profissional. Escolha seu diretor esportivo, customize sua camisa, 
+        selecione 8 atletas oficiais do Tour de France, Giro d'Italia ou Vuelta a España e dispute a liderança com 
+        um orçamento de 1.000 dinheiros.
+      </p>
+      
+      <div class="hero-actions">
+        @if (authService.currentUser()) {
+          <a routerLink="/dashboard" class="btn btn-primary btn-large">Ir para o Dashboard ⚡</a>
+        } @else {
+          <a routerLink="/login" class="btn btn-primary btn-large">Jogar Agora 🚴‍♂️</a>
+          <a routerLink="/register" class="btn btn-secondary btn-large">Criar Conta Grátis</a>
+        }
+      </div>
+    </div>
+    <div class="hero-graphic">
+      <div class="cycling-trophy-card glass-card">
+        <div class="trophy-icon">🏆</div>
+        <h3>Grandes Voltas Fantasy</h3>
+        <p>Giro d'Italia • Tour de France • Vuelta a España</p>
+        <div class="rule-badges">
+          <span class="r-badge">🚴‍♂️ 8 Atletas</span>
+          <span class="r-badge">💰 Budget 1000</span>
+          <span class="r-badge">👕 Camisa Custom</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="rules-section">
+    <h2 class="section-title">Como Funciona o Jogo</h2>
+    <div class="rules-grid">
+      <div class="rule-card glass-card">
+        <div class="rule-num">1</div>
+        <h3>Escolha a Corrida</h3>
+        <p>Selecione qual das três grandes provas mundiais (Tour, Giro ou Vuelta) você deseja disputar nesta rodada.</p>
+      </div>
+      <div class="rule-card glass-card">
+        <div class="rule-num">2</div>
+        <h3>Defina sua Identidade</h3>
+        <p>Escolha o nome do seu time, o país de origem, o Diretor Esportivo e a sua camisa personalizada.</p>
+      </div>
+      <div class="rule-card glass-card">
+        <div class="rule-num">3</div>
+        <h3>Contrate os 8 Ciclistas</h3>
+        <p>Monte seu elenco com exatamente 8 ciclistas sem ultrapassar o teto orçamentário de 1.000 moedas.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sponsors Section -->
+  <section class="sponsors-section">
+    <h2 class="section-title">Nossos Patrocinadores</h2>
+    <p class="section-subtitle">Marcas globais que tornam nossa liga de ciclismo de fantasia possível.</p>
+    
+    @if (errorMessage) {
+      <div class="error-banner">{{ errorMessage }}</div>
+    }
+
+    <div class="grid-sponsors">
+      @for (sponsor of sponsors; track sponsor.id) {
+        <div class="sponsor-card glass-card">
+          <div class="sponsor-logo-container">
+            @if (sponsor.logo_url) {
+              <img [src]="sponsor.logo_url" [alt]="sponsor.name" class="sponsor-logo" />
+            } @else {
+              <div class="sponsor-logo-placeholder">🏢</div>
+            }
+          </div>
+          <h3 class="sponsor-name">{{ sponsor.name }}</h3>
+          <p class="sponsor-desc">{{ sponsor.description }}</p>
+          <a [href]="sponsor.website_url" target="_blank" class="sponsor-link">
+            Visitar Website ↗
+          </a>
+        </div>
+      } @empty {
+        <div class="no-sponsors glass-card">
+          <p>Nenhum patrocinador cadastrado ainda.</p>
+        </div>
+      }
+    </div>
+  </section>
+</div>

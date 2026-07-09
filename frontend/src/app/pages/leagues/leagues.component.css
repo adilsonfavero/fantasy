@@ -1,0 +1,318 @@
+/* Leagues Dashboard Layout and Standings styling */
+
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.admin-header h2 {
+  font-size: 2.25rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--color-gold), var(--color-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.section-subtitle {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin-top: 0.2rem;
+}
+
+/* Workspace Layout Split */
+.admin-workspace {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.workspace-left, .workspace-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-card h3, .list-view-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  border-left: 3px solid var(--color-gold);
+  padding-left: 0.75rem;
+  color: var(--text-primary);
+}
+
+.btn-block-save {
+  width: 100%;
+  padding: 0.85rem;
+  margin-top: 1rem;
+}
+
+/* Row Items and Scroll lists */
+.admin-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.admin-list-container.scrollable-list {
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.admin-list-container.scrollable-list::-webkit-scrollbar,
+.leaderboard-container.scrollable-list::-webkit-scrollbar {
+  width: 6px;
+}
+.admin-list-container.scrollable-list::-webkit-scrollbar-track,
+.leaderboard-container.scrollable-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.admin-list-container.scrollable-list::-webkit-scrollbar-thumb,
+.leaderboard-container.scrollable-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+.admin-list-container.scrollable-list::-webkit-scrollbar-thumb:hover,
+.leaderboard-container.scrollable-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.admin-row-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-card);
+  transition: var(--transition-smooth);
+}
+
+.admin-row-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.admin-row-item.self-user {
+  background: rgba(255, 215, 0, 0.02);
+  border-left: 3px solid var(--color-gold);
+}
+
+.item-mini-avatar {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-card);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.item-mini-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.item-mini-info h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.desc-preview {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-row-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.cursor-pointer:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-cyan);
+  background: rgba(0, 242, 254, 0.05);
+}
+
+.active-race-row {
+  border-color: var(--color-cyan) !important;
+  background: rgba(0, 242, 254, 0.08) !important;
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.15);
+}
+
+/* User Status Badges */
+.user-badge {
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.self-badge {
+  background: rgba(255, 215, 0, 0.1);
+  color: var(--color-gold);
+  border: 1px solid rgba(255, 215, 0, 0.25);
+}
+
+/* Rank Position Badges */
+.rank-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.rank-1 {
+  background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%) !important;
+  border-color: #ffd700 !important;
+  color: #000 !important;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.rank-2 {
+  background: linear-gradient(135deg, #c0c0c0 0%, #808080 100%) !important;
+  border-color: #c0c0c0 !important;
+  color: #000 !important;
+  box-shadow: 0 0 8px rgba(192, 192, 192, 0.3);
+}
+
+.rank-3 {
+  background: linear-gradient(135deg, #cd7f32 0%, #8b5a2b 100%) !important;
+  border-color: #cd7f32 !important;
+  color: #fff !important;
+  box-shadow: 0 0 8px rgba(205, 127, 50, 0.3);
+}
+
+/* Jersey badge decoration */
+.jersey-mini-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+/* Color variants matching team selection */
+.jersey-mini-badge[data-jersey="jersey-red"] {
+  background: rgba(239, 83, 80, 0.15);
+  border-color: rgba(239, 83, 80, 0.4);
+}
+.jersey-mini-badge[data-jersey="jersey-yellow"] {
+  background: rgba(255, 202, 40, 0.15);
+  border-color: rgba(255, 202, 40, 0.4);
+}
+.jersey-mini-badge[data-jersey="jersey-blue"] {
+  background: rgba(66, 165, 245, 0.15);
+  border-color: rgba(66, 165, 245, 0.4);
+}
+.jersey-mini-badge[data-jersey="jersey-green"] {
+  background: rgba(102, 187, 106, 0.15);
+  border-color: rgba(102, 187, 106, 0.4);
+}
+.jersey-mini-badge[data-jersey="jersey-pink"] {
+  background: rgba(236, 64, 122, 0.15);
+  border-color: rgba(236, 64, 122, 0.4);
+}
+.jersey-mini-badge[data-jersey="jersey-orange"] {
+  background: rgba(255, 112, 67, 0.15);
+  border-color: rgba(255, 112, 67, 0.4);
+}
+.jersey-mini-badge[data-jersey="jersey-rainbow"] {
+  background: linear-gradient(135deg, rgba(239, 83, 80, 0.2), rgba(255, 202, 40, 0.2), rgba(102, 187, 106, 0.2), rgba(66, 165, 245, 0.2));
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Spinner and Alert utilities */
+.spinner-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-left-color: var(--color-cyan);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.alert {
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.alert-success {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--color-success);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.alert-error {
+  background: rgba(244, 63, 94, 0.1);
+  color: var(--color-error);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+}
+
+.no-items-msg {
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+  padding: 2rem 0;
+  font-size: 0.95rem;
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+  .admin-workspace {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
