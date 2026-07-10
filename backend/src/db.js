@@ -7,20 +7,32 @@ const dbPassword = process.env.DB_PASSWORD || 'postgres';
 const dbPort = parseInt(process.env.DB_PORT || '5432');
 const dbName = process.env.DB_DATABASE || 'fantasy_db';
 
+// Configure connection options. Render/Neon usually supply DATABASE_URL and require SSL.
+const poolConfig = process.env.DATABASE_URL
+  ? {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false }
+    }
+  : {
+      user: dbUser,
+      host: dbHost,
+      database: dbName,
+      password: dbPassword,
+      port: dbPort,
+    };
+
 // Primary application connection pool
-const pool = new Pool({
-  user: dbUser,
-  host: dbHost,
-  database: dbName,
-  password: dbPassword,
-  port: dbPort,
-});
+const pool = new Pool(poolConfig);
 
 // Helper query function
 const query = (text, params) => pool.query(text, params);
 
 // Auto-creates the database "fantasy_db" if it does not exist
 async function ensureDatabaseExists() {
+  if (process.env.DATABASE_URL) {
+    // Skip database creation check when using a connection string on cloud services
+    return;
+  }
   const adminClient = new Client({
     user: dbUser,
     host: dbHost,
