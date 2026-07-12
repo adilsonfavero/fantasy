@@ -32,14 +32,14 @@ export class DashboardComponent implements OnInit {
   loadDashboardData(): void {
     console.log('Starting dashboard data load...');
     this.isLoading = true;
-    
+
     // Fetch races first
     this.apiService.getRaces().subscribe({
       next: (racesData) => {
         console.log('Races loaded in component:', racesData);
         // Only display races that are active for the current period
         this.races = racesData.filter(r => r.is_active);
-        
+
         // Then fetch user's created teams
         this.apiService.getUserTeams().subscribe({
           next: (teamsData) => {

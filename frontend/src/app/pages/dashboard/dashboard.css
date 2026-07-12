@@ -106,7 +106,8 @@
   font-weight: 700;
 }
 
-.user-team-director, .user-team-spent {
+.user-team-director,
+.user-team-spent {
   font-size: 0.85rem;
   color: var(--text-secondary);
 }
@@ -127,7 +128,8 @@
   font-size: 1.25rem;
 }
 
-.btn-block-create, .btn-block-edit {
+.btn-block-create,
+.btn-block-edit {
   width: 100%;
   padding: 0.75rem;
 }
@@ -136,7 +138,8 @@
 .race-card.race-tour-de-france {
   border-top-color: var(--color-gold);
 }
-.race-card.race-tour-de-france .btn-block-create, 
+
+.race-card.race-tour-de-france .btn-block-create,
 .race-card.race-tour-de-france .btn-block-edit {
   background: linear-gradient(135deg, var(--color-gold), #eab308);
   color: #000;
@@ -145,13 +148,15 @@
 .race-card.race-giro-ditalia {
   border-top-color: var(--color-pink);
 }
-.race-card.race-giro-ditalia .btn-block-create, 
+
+.race-card.race-giro-ditalia .btn-block-create,
 .race-card.race-giro-ditalia .btn-block-edit {
   background: linear-gradient(135deg, var(--color-pink), #db2777);
   color: #fff;
   box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
 }
-.race-card.race-giro-ditalia .btn-block-create:hover, 
+
+.race-card.race-giro-ditalia .btn-block-create:hover,
 .race-card.race-giro-ditalia .btn-block-edit:hover {
   box-shadow: 0 6px 20px rgba(236, 72, 153, 0.35);
 }
@@ -159,13 +164,15 @@
 .race-card.race-vuelta-a-espana {
   border-top-color: var(--color-red);
 }
-.race-card.race-vuelta-a-espana .btn-block-create, 
+
+.race-card.race-vuelta-a-espana .btn-block-create,
 .race-card.race-vuelta-a-espana .btn-block-edit {
   background: linear-gradient(135deg, var(--color-red), #dc2626);
   color: #fff;
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }
-.race-card.race-vuelta-a-espana .btn-block-create:hover, 
+
+.race-card.race-vuelta-a-espana .btn-block-create:hover,
 .race-card.race-vuelta-a-espana .btn-block-edit:hover {
   box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
 }
@@ -191,7 +198,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .alert-error {
@@ -230,8 +239,13 @@
 }
 
 @keyframes slideLeft {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 .stages-sidebar-header {
@@ -377,4 +391,3 @@
 .stage-profile-img:hover {
   opacity: 1;
 }
-
