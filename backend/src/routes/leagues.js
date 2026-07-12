@@ -13,10 +13,23 @@ router.post('/', authenticateToken, async (req, res) => {
   }
 
   try {
-    // Check if race exists
-    const raceCheck = await db.query('SELECT * FROM races WHERE id = $1', [race_id]);
+    // Check if race exists and is active
+    const raceCheck = await db.query(
+      `SELECT id, name, 
+       CASE 
+         WHEN start_date IS NULL OR end_date IS NULL THEN FALSE
+         ELSE CURRENT_DATE BETWEEN start_date AND end_date
+       END as is_active 
+       FROM races WHERE id = $1`,
+      [race_id]
+    );
+
     if (raceCheck.rows.length === 0) {
       return res.status(400).json({ message: 'A prova/evento informada não existe.' });
+    }
+
+    if (!raceCheck.rows[0].is_active) {
+      return res.status(400).json({ message: 'Essa prova não está ativa no momento. Ligas só podem ser criadas para eventos do período atual.' });
     }
 
     // Generate unique 6-digit numeric sharing code
@@ -79,12 +92,27 @@ router.post('/join', authenticateToken, async (req, res) => {
   }
 
   try {
-    // Find league
-    const leagueResult = await db.query('SELECT * FROM leagues WHERE code = $1', [code.trim()]);
+    // Find league and check if its race is active
+    const leagueResult = await db.query(
+      `SELECT l.*, 
+       CASE 
+         WHEN r.start_date IS NULL OR r.end_date IS NULL THEN FALSE
+         ELSE CURRENT_DATE BETWEEN r.start_date AND r.end_date
+       END as is_active 
+       FROM leagues l
+       JOIN races r ON l.race_id = r.id
+       WHERE l.code = $1`,
+      [code.trim()]
+    );
+
     if (leagueResult.rows.length === 0) {
       return res.status(404).json({ message: 'Liga não encontrada com o código informado.' });
     }
     const league = leagueResult.rows[0];
+
+    if (!league.is_active) {
+      return res.status(400).json({ message: 'Não é possível entrar em uma liga associada a um evento inativo.' });
+    }
 
     // Check if user has a team for this league's race
     const teamResult = await db.query(

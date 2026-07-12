@@ -101,6 +101,8 @@ async function initDatabase() {
         name VARCHAR(255) NOT NULL,
         description TEXT,
         year INT NOT NULL,
+        start_date DATE,
+        end_date DATE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
 
@@ -134,6 +136,8 @@ async function initDatabase() {
       );
 
       ALTER TABLE user_teams ADD COLUMN IF NOT EXISTS points INT DEFAULT 0;
+      ALTER TABLE races ADD COLUMN IF NOT EXISTS start_date DATE;
+      ALTER TABLE races ADD COLUMN IF NOT EXISTS end_date DATE;
 
       CREATE TABLE IF NOT EXISTS leagues (
         id SERIAL PRIMARY KEY,
@@ -165,6 +169,19 @@ async function initDatabase() {
       );
     `);
     
+    // Set start and end dates for existing races that do not have them
+    await client.query(`
+      UPDATE races SET start_date = '2026-07-01', end_date = '2026-07-31' WHERE name = 'Tour de France' AND start_date IS NULL;
+      UPDATE races SET start_date = '2026-05-01', end_date = '2026-05-31' WHERE name = 'Giro d''Italia' AND start_date IS NULL;
+      UPDATE races SET start_date = '2026-08-15', end_date = '2026-09-15' WHERE name = 'Vuelta a España' AND start_date IS NULL;
+      UPDATE races SET start_date = '2026-03-21', end_date = '2026-03-21' WHERE name = 'Milão-Sanremo' AND start_date IS NULL;
+      UPDATE races SET start_date = '2026-04-05', end_date = '2026-04-05' WHERE name = 'Volta a Flandres' AND start_date IS NULL;
+      UPDATE races SET start_date = '2026-04-12', end_date = '2026-04-12' WHERE name = 'Paris-Roubaix' AND start_date IS NULL;
+      UPDATE races SET start_date = '2026-04-26', end_date = '2026-04-26' WHERE name = 'Liège-Bastogne-Liège' AND start_date IS NULL;
+      UPDATE races SET start_date = '2026-10-10', end_date = '2026-10-10' WHERE name = 'Il Lombardia' AND start_date IS NULL;
+      UPDATE races SET start_date = '2026-03-07', end_date = '2026-03-07' WHERE name = 'Strade Bianche' AND start_date IS NULL;
+    `);
+
     console.log('Tabelas verificadas/criadas no banco de dados.');
 
     // Seed sponsors if empty
@@ -186,16 +203,16 @@ async function initDatabase() {
       console.log('Carregando Grandes Voltas e Clássicas de Ciclismo...');
       await client.query('TRUNCATE TABLE team_athletes, user_teams, athletes, races RESTART IDENTITY CASCADE');
       const raceInsertResult = await client.query(`
-        INSERT INTO races (name, description, year) VALUES
-        ('Tour de France', 'A maior e mais prestigiosa corrida de ciclismo do mundo (Grande Volta).', 2026),
-        ('Giro d''Italia', 'A charmosa corrida pelas estradas e montanhas italianas (Grande Volta).', 2026),
-        ('Vuelta a España', 'A emocionante volta espanhola que fecha a temporada de Grand Tours (Grande Volta).', 2026),
-        ('Milão-Sanremo', 'A clássica dos velocistas, a mais longa corrida de um dia do calendário.', 2026),
-        ('Volta a Flandres', 'Clássica dos paralelepípedos na Bélgica com subidas curtas e íngremes (Muro de Grammont).', 2026),
-        ('Paris-Roubaix', 'O Inferno do Norte, famosa por seus severos setores de paralelepípedos.', 2026),
-        ('Liège-Bastogne-Liège', 'A Doyenne (A Mais Velha), clássica montanhosa nas Ardenas belgas.', 2026),
-        ('Il Lombardia', 'A clássica das folhas mortas, monumento que fecha a temporada de outono.', 2026),
-        ('Strade Bianche', 'A corrida pelas estradas brancas de terra batida da Toscana.', 2026)
+        INSERT INTO races (name, description, year, start_date, end_date) VALUES
+        ('Tour de France', 'A maior e mais prestigiosa corrida de ciclismo do mundo (Grande Volta).', 2026, '2026-07-01', '2026-07-31'),
+        ('Giro d''Italia', 'A charmosa corrida pelas estradas e montanhas italianas (Grande Volta).', 2026, '2026-05-01', '2026-05-31'),
+        ('Vuelta a España', 'A emocionante volta espanhola que fecha a temporada de Grand Tours (Grande Volta).', 2026, '2026-08-15', '2026-09-15'),
+        ('Milão-Sanremo', 'A clássica dos velocistas, a mais longa corrida de um dia do calendário.', 2026, '2026-03-21', '2026-03-21'),
+        ('Volta a Flandres', 'Clássica dos paralelepípedos na Bélgica com subidas curtas e íngremes (Muro de Grammont).', 2026, '2026-04-05', '2026-04-05'),
+        ('Paris-Roubaix', 'O Inferno do Norte, famosa por seus severos setores de paralelepípedos.', 2026, '2026-04-12', '2026-04-12'),
+        ('Liège-Bastogne-Liège', 'A Doyenne (A Mais Velha), clássica montanhosa nas Ardenas belgas.', 2026, '2026-04-26', '2026-04-26'),
+        ('Il Lombardia', 'A clássica das folhas mortas, monumento que fecha a temporada de outono.', 2026, '2026-10-10', '2026-10-10'),
+        ('Strade Bianche', 'A corrida pelas estradas brancas de terra batida da Toscana.', 2026, '2026-03-07', '2026-03-07')
         RETURNING id, name;
       `);
 

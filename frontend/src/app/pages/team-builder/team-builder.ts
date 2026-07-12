@@ -131,7 +131,7 @@ export class TeamBuilderComponent implements OnInit {
     this.apiService.getRaces().subscribe({
       next: (races) => {
         const foundRace = races.find(r => r.id === this.raceId);
-        if (!foundRace) {
+        if (!foundRace || !foundRace.is_active) {
           this.router.navigate(['/dashboard']);
           return;
         }

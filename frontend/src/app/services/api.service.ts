@@ -23,6 +23,9 @@ export interface Race {
   name: string;
   description: string;
   year: number;
+  start_date?: string;
+  end_date?: string;
+  is_active?: boolean;
 }
 
 export interface Athlete {

@@ -6,7 +6,21 @@ const { requireAdmin } = require('../middleware/auth');
 // Get all races (Grandes Voltas)
 router.get('/', async (req, res) => {
   try {
-    const result = await db.query('SELECT * FROM races ORDER BY name ASC');
+    const result = await db.query(`
+      SELECT 
+        id, 
+        name, 
+        description, 
+        year,
+        to_char(start_date, 'YYYY-MM-DD') as start_date,
+        to_char(end_date, 'YYYY-MM-DD') as end_date,
+        CASE 
+          WHEN start_date IS NULL OR end_date IS NULL THEN FALSE
+          ELSE CURRENT_DATE BETWEEN start_date AND end_date
+        END as is_active
+      FROM races 
+      ORDER BY name ASC
+    `);
     res.json(result.rows);
   } catch (err) {
     console.error(err);

@@ -80,6 +80,27 @@ router.post('/', authenticateToken, async (req, res) => {
   try {
     await client.query('BEGIN');
 
+    // Verify that the race is currently active
+    const raceCheck = await client.query(
+      `SELECT id, name, 
+       CASE 
+         WHEN start_date IS NULL OR end_date IS NULL THEN FALSE
+         ELSE CURRENT_DATE BETWEEN start_date AND end_date
+       END as is_active 
+       FROM races WHERE id = $1`,
+      [race_id]
+    );
+
+    if (raceCheck.rows.length === 0) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ message: 'A prova selecionada não existe.' });
+    }
+
+    if (!raceCheck.rows[0].is_active) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ message: 'Essa prova não está ativa no momento. Equipes só podem ser criadas ou editadas durante o período do evento.' });
+    }
+
     // Fetch details of selected athletes from database to calculate real cost and verify race_id
     const athletesResult = await client.query(
       'SELECT id, name, value, race_id FROM athletes WHERE id = ANY($1)',

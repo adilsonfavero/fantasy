@@ -60,7 +60,8 @@ export class LeaguesComponent implements OnInit {
   loadRaces(): void {
     this.apiService.getRaces().subscribe({
       next: (data) => {
-        this.races = data;
+        // Only allow creating leagues for active events
+        this.races = data.filter(r => r.is_active);
         if (this.races.length > 0) {
           this.selectedRaceId = this.races[0].id;
         }

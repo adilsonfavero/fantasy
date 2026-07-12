@@ -166,7 +166,9 @@
           (change)="onRaceChange($event)"
         >
           @for (race of races; track race.id) {
-            <option [value]="race.id">{{ race.name }} ({{ race.year }})</option>
+            <option [value]="race.id">
+              {{ race.name }} ({{ race.year }}) - {{ race.is_active ? '🟢 Ativo' : '🔴 Inativo' }}
+            </option>
           }
         </select>
       </div>
