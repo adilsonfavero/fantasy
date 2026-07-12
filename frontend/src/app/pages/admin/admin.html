@@ -167,7 +167,7 @@
         >
           @for (race of races; track race.id) {
             <option [value]="race.id">
-              {{ race.name }} ({{ race.year }}) - {{ race.is_active ? '🟢 Ativo' : '🔴 Inativo' }}
+              {{ race.name }} ({{ race.start_date | date: 'dd/MM/yyyy' : 'UTC' }} a {{ race.end_date | date: 'dd/MM/yyyy' : 'UTC' }}) - {{ race.is_active ? '🟢 Ativo' : '🔴 Inativo' }}
             </option>
           }
         </select>

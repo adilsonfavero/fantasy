@@ -28,6 +28,10 @@
           </div>
           
           <p class="race-desc">{{ race.description }}</p>
+          
+          <div class="race-period" style="font-size: 0.85rem; color: #b0b0b0; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.25rem;">
+            <span>📅 Período: <strong>{{ race.start_date | date: 'dd/MM/yyyy' : 'UTC' }}</strong> a <strong>{{ race.end_date | date: 'dd/MM/yyyy' : 'UTC' }}</strong></span>
+          </div>
 
           <div class="team-status-section">
             @if (team) {

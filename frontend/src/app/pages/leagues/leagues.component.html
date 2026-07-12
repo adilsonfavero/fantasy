@@ -48,7 +48,9 @@
               required
             >
               @for (race of races; track race.id) {
-                <option [value]="race.id">{{ race.name }} ({{ race.year }})</option>
+                <option [value]="race.id">
+                  {{ race.name }} ({{ race.start_date | date: 'dd/MM/yyyy' : 'UTC' }} a {{ race.end_date | date: 'dd/MM/yyyy' : 'UTC' }})
+                </option>
               }
             </select>
           </div>
