@@ -9,10 +9,10 @@ const JWT_SECRET = process.env.JWT_SECRET || 'supersecretcyclingfantasykey123!';
 
 // Register Route
 router.post('/register', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, birth_date, country, state, city } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ message: 'E-mail e senha são obrigatórios.' });
+  if (!email || !password || !birth_date || !country || !state || !city) {
+    return res.status(400).json({ message: 'Todos os campos são obrigatórios (e-mail, senha, data de nascimento, país, estado e cidade).' });
   }
 
   try {
@@ -28,8 +28,8 @@ router.post('/register', async (req, res) => {
 
     // Save user
     const newUser = await db.query(
-      'INSERT INTO users (email, password_hash, is_admin) VALUES ($1, $2, FALSE) RETURNING id, email, is_admin',
-      [email.toLowerCase().trim(), passwordHash]
+      'INSERT INTO users (email, password_hash, is_admin, birth_date, country, state, city) VALUES ($1, $2, FALSE, $3, $4, $5, $6) RETURNING id, email, is_admin',
+      [email.toLowerCase().trim(), passwordHash, birth_date, country, state, city]
     );
 
     // Create token
@@ -101,13 +101,27 @@ router.get('/profile', async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    const userResult = await db.query('SELECT id, email, is_admin FROM users WHERE id = $1', [decoded.id]);
+    const userResult = await db.query(
+      "SELECT id, email, is_admin, to_char(birth_date, 'YYYY-MM-DD') as birth_date, country, state, city FROM users WHERE id = $1", 
+      [decoded.id]
+    );
     
     if (userResult.rows.length === 0) {
       return res.status(404).json({ message: 'Usuário não encontrado' });
     }
 
-    res.json({ user: { id: userResult.rows[0].id, email: userResult.rows[0].email, isAdmin: userResult.rows[0].is_admin } });
+    const row = userResult.rows[0];
+    res.json({ 
+      user: { 
+        id: row.id, 
+        email: row.email, 
+        isAdmin: row.is_admin,
+        birthDate: row.birth_date,
+        country: row.country,
+        state: row.state,
+        city: row.city
+      } 
+    });
   } catch (err) {
     res.status(401).json({ message: 'Token expirado ou inválido' });
   }
@@ -118,7 +132,9 @@ const { requireAdmin } = require('../middleware/auth');
 
 router.get('/users', requireAdmin, async (req, res) => {
   try {
-    const result = await db.query('SELECT id, email, is_admin, created_at FROM users ORDER BY email ASC');
+    const result = await db.query(
+      "SELECT id, email, is_admin, to_char(birth_date, 'YYYY-MM-DD') as birth_date, country, state, city, created_at FROM users ORDER BY email ASC"
+    );
     res.json(result.rows);
   } catch (err) {
     console.error(err);

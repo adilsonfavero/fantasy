@@ -14,8 +14,8 @@ export class AdminComponent implements OnInit {
   private readonly apiService = inject(ApiService);
   readonly authService = inject(AuthService);
 
-  // Tabs: 'sponsors' | 'athletes' | 'users'
-  activeTab = signal<'sponsors' | 'athletes' | 'users'>('sponsors');
+  // Tabs: 'sponsors' | 'athletes' | 'users' | 'telemetry'
+  activeTab = signal<'sponsors' | 'athletes' | 'users' | 'telemetry'>('sponsors');
 
   // General State
   isLoading = true;
@@ -42,15 +42,26 @@ export class AdminComponent implements OnInit {
   athleteValue = 150;
   editingAthleteId = signal<number | null>(null);
 
+  // Race/Event Form fields
+  raceName = '';
+  raceDescription = '';
+  raceYear = new Date().getFullYear();
+  raceStartDate = '';
+  raceEndDate = '';
+  editingRaceId = signal<number | null>(null);
+
   // Users State
   users: User[] = [];
+
+  // Telemetry State
+  telemetryData: any = null;
 
   ngOnInit(): void {
     this.loadSponsors();
     this.loadRaces();
   }
 
-  setTab(tab: 'sponsors' | 'athletes' | 'users'): void {
+  setTab(tab: 'sponsors' | 'athletes' | 'users' | 'telemetry'): void {
     this.activeTab.set(tab);
     this.errorMessage = '';
     this.successMessage = '';
@@ -60,7 +71,10 @@ export class AdminComponent implements OnInit {
     } else if (tab === 'sponsors') {
       this.loadSponsors();
     } else if (tab === 'athletes') {
+      this.loadRaces();
       this.loadAthletesForSelectedRace();
+    } else if (tab === 'telemetry') {
+      this.loadTelemetry();
     }
   }
 
@@ -372,5 +386,92 @@ export class AdminComponent implements OnInit {
         this.isSubmitting.set(false);
       }
     });
+  }
+
+  // --- Telemetry & Event Management ---
+  loadTelemetry(): void {
+    this.isLoading = true;
+    this.apiService.getTelemetrySummary().subscribe({
+      next: (data) => {
+        this.telemetryData = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading telemetry:', err);
+        this.errorMessage = 'Erro ao carregar dados de telemetria.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  onSubmitRace(): void {
+    if (!this.raceName || !this.raceYear || !this.raceStartDate || !this.raceEndDate) {
+      this.errorMessage = 'Nome, ano, data de início e data de fim são obrigatórios.';
+      return;
+    }
+
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.isSubmitting.set(true);
+
+    const raceData = {
+      name: this.raceName,
+      description: this.raceDescription,
+      year: parseInt(this.raceYear as any),
+      start_date: this.raceStartDate,
+      end_date: this.raceEndDate
+    };
+
+    const editId = this.editingRaceId();
+    if (editId) {
+      this.apiService.updateRace(editId, raceData).subscribe({
+        next: () => {
+          this.successMessage = 'Evento atualizado com sucesso!';
+          this.cancelEditRace();
+          this.loadRaces();
+          this.isSubmitting.set(false);
+        },
+        error: (err) => {
+          console.error(err);
+          this.errorMessage = err.error?.message || 'Erro ao atualizar evento.';
+          this.isSubmitting.set(false);
+        }
+      });
+    } else {
+      this.apiService.addRace(raceData).subscribe({
+        next: () => {
+          this.successMessage = 'Evento criado com sucesso!';
+          this.cancelEditRace();
+          this.loadRaces();
+          this.isSubmitting.set(false);
+        },
+        error: (err) => {
+          console.error(err);
+          this.errorMessage = err.error?.message || 'Erro ao criar evento.';
+          this.isSubmitting.set(false);
+        }
+      });
+    }
+  }
+
+  startEditRace(race: Race): void {
+    this.editingRaceId.set(race.id);
+    this.raceName = race.name;
+    this.raceDescription = race.description || '';
+    this.raceYear = race.year;
+    this.raceStartDate = race.start_date || '';
+    this.raceEndDate = race.end_date || '';
+    this.errorMessage = '';
+    this.successMessage = '';
+  }
+
+  cancelEditRace(): void {
+    this.editingRaceId.set(null);
+    this.raceName = '';
+    this.raceDescription = '';
+    this.raceYear = new Date().getFullYear();
+    this.raceStartDate = '';
+    this.raceEndDate = '';
+    this.errorMessage = '';
   }
 }

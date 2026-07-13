@@ -147,4 +147,16 @@ export class ApiService {
   getRaceStages(raceId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/races/${raceId}/stages`);
   }
+
+  addRace(raceData: { name: string, description: string, year: number, start_date: string, end_date: string }): Observable<{ message: string, race: Race }> {
+    return this.http.post<{ message: string, race: Race }>(`${this.baseUrl}/races`, raceData);
+  }
+
+  updateRace(id: number, raceData: { name: string, description: string, year: number, start_date: string, end_date: string }): Observable<{ message: string, race: Race }> {
+    return this.http.put<{ message: string, race: Race }>(`${this.baseUrl}/races/${id}`, raceData);
+  }
+
+  getTelemetrySummary(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/telemetry`);
+  }
 }

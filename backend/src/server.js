@@ -27,12 +27,14 @@ const sponsorRoutes = require('./routes/sponsors');
 const raceRoutes = require('./routes/races');
 const teamRoutes = require('./routes/teams');
 const leagueRoutes = require('./routes/leagues');
+const telemetryRoutes = require('./routes/telemetry');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/sponsors', sponsorRoutes);
 app.use('/api/races', raceRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/leagues', leagueRoutes);
+app.use('/api/telemetry', telemetryRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

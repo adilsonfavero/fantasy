@@ -88,3 +88,19 @@
   text-decoration: underline;
   text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
 }
+
+.form-section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-gold);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.form-loader {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+  font-style: italic;
+}

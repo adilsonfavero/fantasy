@@ -164,9 +164,23 @@ async function initDatabase() {
         distance_km DECIMAL(5,1) NOT NULL,
         profile_type VARCHAR(100) NOT NULL,
         image_url TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT unique_race_stage UNIQUE (race_id, stage_number)
       );
+
+      CREATE TABLE IF NOT EXISTS telemetry_logs (
+        id SERIAL PRIMARY KEY,
+        user_id INT REFERENCES users(id) ON DELETE SET NULL,
+        ip_address VARCHAR(45),
+        country VARCHAR(100),
+        state VARCHAR(100),
+        city VARCHAR(100),
+        accessed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS birth_date DATE;
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS country VARCHAR(100);
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS state VARCHAR(100);
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS city VARCHAR(100);
     `);
     
     // Set start and end dates for existing races that do not have them

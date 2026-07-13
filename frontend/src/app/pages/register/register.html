@@ -65,10 +65,111 @@
         }
       </div>
 
+      <!-- Geolocation & Profile Section -->
+      <div class="form-section-title">Dados de Perfil e Localização</div>
+
+      <div class="form-group">
+        <label for="birthDate" class="form-label">Data de Nascimento</label>
+        <input 
+          type="date" 
+          id="birthDate" 
+          name="birthDate" 
+          class="form-control" 
+          [(ngModel)]="birthDate" 
+          required 
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="country" class="form-label">País</label>
+        @if (isLoadingCountries()) {
+          <div class="form-loader">Carregando países...</div>
+        }
+        <select 
+          id="country" 
+          name="country" 
+          class="form-control" 
+          [(ngModel)]="selectedCountry" 
+          (change)="onCountryChange()"
+          required
+        >
+          <option value="" disabled selected>Selecione seu país</option>
+          @for (c of countries; track c) {
+            <option [value]="c">{{ c }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="state" class="form-label">Estado / Província</label>
+        @if (isLoadingStates()) {
+          <div class="form-loader">Carregando estados...</div>
+        }
+        @if (useTextState) {
+          <input 
+            type="text" 
+            id="state" 
+            name="state" 
+            class="form-control" 
+            [(ngModel)]="selectedState" 
+            placeholder="Digite seu estado"
+            required
+          />
+        } @else {
+          <select 
+            id="state" 
+            name="state" 
+            class="form-control" 
+            [(ngModel)]="selectedState" 
+            (change)="onStateChange()"
+            [disabled]="!selectedCountry"
+            required
+          >
+            <option value="" disabled selected>Selecione seu estado</option>
+            @for (s of states; track s) {
+              <option [value]="s">{{ s }}</option>
+            }
+          </select>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="city" class="form-label">Cidade</label>
+        @if (isLoadingCities()) {
+          <div class="form-loader">Carregando cidades...</div>
+        }
+        @if (useTextCity) {
+          <input 
+            type="text" 
+            id="city" 
+            name="city" 
+            class="form-control" 
+            [(ngModel)]="selectedCity" 
+            placeholder="Digite sua cidade"
+            required
+          />
+        } @else {
+          <select 
+            id="city" 
+            name="city" 
+            class="form-control" 
+            [(ngModel)]="selectedCity" 
+            [disabled]="!selectedState"
+            required
+          >
+            <option value="" disabled selected>Selecione sua cidade</option>
+            @for (city of cities; track city) {
+              <option [value]="city">{{ city }}</option>
+            }
+          </select>
+        }
+      </div>
+
       <button 
         type="submit" 
         class="btn btn-primary btn-block" 
         [disabled]="registerForm.invalid || password !== confirmPassword || isSubmitting()"
+        style="margin-top: 1.5rem;"
       >
         @if (isSubmitting()) {
           Cadastrando...

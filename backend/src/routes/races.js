@@ -131,4 +131,56 @@ router.get('/:id/stages', async (req, res) => {
   }
 });
 
+// Add a new race/event (Admin only)
+router.post('/', requireAdmin, async (req, res) => {
+  const { name, description, year, start_date, end_date } = req.body;
+
+  if (!name || !year || !start_date || !end_date) {
+    return res.status(400).json({ message: 'Nome, ano, data de início e data de fim são obrigatórios.' });
+  }
+
+  try {
+    const result = await db.query(
+      `INSERT INTO races (name, description, year, start_date, end_date) 
+       VALUES ($1, $2, $3, $4, $5) 
+       RETURNING id, name, description, year, to_char(start_date, 'YYYY-MM-DD') as start_date, to_char(end_date, 'YYYY-MM-DD') as end_date`,
+      [name, description, parseInt(year), start_date, end_date]
+    );
+
+    res.status(201).json({ message: 'Evento criado com sucesso!', race: result.rows[0] });
+  } catch (err) {
+    console.error('Error creating race:', err);
+    res.status(500).json({ message: 'Erro ao criar evento.' });
+  }
+});
+
+// Update an existing race/event (Admin only)
+router.put('/:id', requireAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { name, description, year, start_date, end_date } = req.body;
+
+  if (!name || !year || !start_date || !end_date) {
+    return res.status(400).json({ message: 'Nome, ano, data de início e data de fim são obrigatórios.' });
+  }
+
+  try {
+    const result = await db.query(
+      `UPDATE races 
+       SET name = $1, description = $2, year = $3, start_date = $4, end_date = $5 
+       WHERE id = $6 
+       RETURNING id, name, description, year, to_char(start_date, 'YYYY-MM-DD') as start_date, to_char(end_date, 'YYYY-MM-DD') as end_date`,
+      [name, description, parseInt(year), start_date, end_date, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Evento não encontrado.' });
+    }
+
+    res.json({ message: 'Evento atualizado com sucesso!', race: result.rows[0] });
+  } catch (err) {
+    console.error('Error updating race:', err);
+    res.status(500).json({ message: 'Erro ao atualizar evento.' });
+  }
+});
+
 module.exports = router;

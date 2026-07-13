@@ -426,3 +426,133 @@
   border-radius: 12px;
   margin-bottom: 2rem;
 }
+
+/* Event & Telemetry Panel Styling */
+.status-badge {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  display: inline-block;
+}
+
+.status-badge.active-badge {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--color-success);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.telemetry-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.telemetry-summary-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.telemetry-card {
+  flex: 1;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.telemetry-card h4 {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.telemetry-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--color-gold);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.telemetry-grids {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.telemetry-table-card {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.telemetry-table-card h3, .telemetry-logs-card h3 {
+  font-size: 1.2rem;
+  color: #fff;
+  margin: 0;
+}
+
+.scrollable-table {
+  max-height: 300px;
+  overflow-y: auto;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.scrollable-table.logs-table {
+  max-height: 450px;
+}
+
+.telemetry-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.telemetry-table th, .telemetry-table td {
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.telemetry-table th {
+  background: rgba(20, 24, 33, 0.95);
+  color: var(--text-secondary);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(5px);
+}
+
+.telemetry-table tr:hover td {
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.telemetry-table td code {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: var(--color-gold);
+}
+
+.telemetry-table .empty-cell {
+  text-align: center;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.telemetry-table .timestamp-cell {
+  color: var(--text-secondary);
+  white-space: nowrap;
+}

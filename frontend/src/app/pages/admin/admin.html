@@ -18,7 +18,7 @@
       [class.active]="activeTab() === 'athletes'"
       (click)="setTab('athletes')"
     >
-      🚴‍♂️ Atletas por Evento
+      📅 Evento
     </button>
     <button 
       class="tab-btn" 
@@ -26,6 +26,13 @@
       (click)="setTab('users')"
     >
       👥 Usuários
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab() === 'telemetry'"
+      (click)="setTab('telemetry')"
+    >
+      📊 Telemetria
     </button>
   </div>
 
@@ -151,9 +158,141 @@
     </div>
   }
 
-  <!-- Tab 2: Athletes -->
+  <!-- Tab 2: Athletes (Renamed to Evento) -->
   @if (activeTab() === 'athletes') {
     <div class="athletes-admin-workspace">
+      
+      <!-- SECTION 1: EVENT / RACE MANAGEMENT -->
+      <div class="admin-workspace" style="margin-bottom: 2rem;">
+        <!-- Left: Event Form -->
+        <div class="workspace-left">
+          <div class="glass-card form-card">
+            <h3>{{ editingRaceId() ? 'Editar Detalhes do Evento' : 'Cadastrar Novo Evento' }}</h3>
+            
+            <form (ngSubmit)="onSubmitRace()" #raceForm="ngForm">
+              <div class="form-group">
+                <label for="rcName" class="form-label">Nome do Evento</label>
+                <input 
+                  type="text" 
+                  id="rcName" 
+                  name="rcName"
+                  class="form-control" 
+                  [(ngModel)]="raceName" 
+                  required
+                  placeholder="Ex: Tour de France 2026"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="rcYear" class="form-label">Ano do Evento</label>
+                <input 
+                  type="number" 
+                  id="rcYear" 
+                  name="rcYear"
+                  class="form-control" 
+                  [(ngModel)]="raceYear" 
+                  required
+                  placeholder="Ex: 2026"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="rcStartDate" class="form-label">Data de Início</label>
+                <input 
+                  type="date" 
+                  id="rcStartDate" 
+                  name="rcStartDate"
+                  class="form-control" 
+                  [(ngModel)]="raceStartDate" 
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="rcEndDate" class="form-label">Data de Fim</label>
+                <input 
+                  type="date" 
+                  id="rcEndDate" 
+                  name="rcEndDate"
+                  class="form-control" 
+                  [(ngModel)]="raceEndDate" 
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="rcDesc" class="form-label">Descrição</label>
+                <textarea 
+                  id="rcDesc" 
+                  name="rcDesc"
+                  class="form-control" 
+                  rows="3"
+                  [(ngModel)]="raceDescription" 
+                  placeholder="Detalhes ou breve histórico sobre a prova..."
+                ></textarea>
+              </div>
+
+              <div class="form-actions-row">
+                <button 
+                  type="submit" 
+                  class="btn btn-primary" 
+                  [disabled]="raceForm.invalid || isSubmitting()"
+                >
+                  {{ editingRaceId() ? 'Salvar Evento 💾' : 'Criar Evento 📅' }}
+                </button>
+                
+                @if (editingRaceId()) {
+                  <button 
+                    type="button" 
+                    class="btn btn-secondary" 
+                    (click)="cancelEditRace()"
+                  >
+                    Cancelar
+                  </button>
+                }
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right: Event List -->
+        <div class="workspace-right">
+          <div class="glass-card list-view-card">
+            <h3>Histórico de Eventos / Provas (Total: {{ races.length }})</h3>
+            
+            <div class="admin-list-container scrollable-list">
+              @for (race of races; track race.id) {
+                <div class="admin-row-item">
+                  <div class="item-mini-avatar">📅</div>
+                  <div class="item-mini-info">
+                    <h4>{{ race.name }} ({{ race.year }})</h4>
+                    <p class="desc-preview">
+                      {{ race.start_date | date: 'dd/MM/yyyy' : 'UTC' }} a {{ race.end_date | date: 'dd/MM/yyyy' : 'UTC' }}
+                      • <span class="status-badge" [class.active-badge]="race.is_active">{{ race.is_active ? '🟢 Ativo' : '🔴 Inativo' }}</span>
+                    </p>
+                  </div>
+                  
+                  <div class="item-row-actions">
+                    <button 
+                      (click)="startEditRace(race)" 
+                      class="btn-action-edit" 
+                      title="Editar evento"
+                    >
+                      ✏️
+                    </button>
+                  </div>
+                </div>
+              } @empty {
+                <p class="no-items-msg">Nenhuma prova cadastrada no histórico.</p>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider" style="margin: 2.5rem 0; border: 0; border-top: 1px solid rgba(255,255,255,0.1);" />
+
+      <h3 style="margin-bottom: 1.5rem; color: #fff; font-size: 1.35rem;">🚴‍♂️ Gerenciar Atletas do Evento Selecionado</h3>
       <!-- Race Selector Dropdown -->
       <div class="glass-card selector-card">
         <label for="raceSelect" class="form-label" style="display:inline-block; margin-right:1rem; font-weight:600;">
@@ -423,6 +562,132 @@
               }
             </div>
           }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Tab 4: Telemetry -->
+  @if (activeTab() === 'telemetry') {
+    <div class="telemetry-workspace animate-fade-in">
+      <div class="telemetry-summary-row">
+        <div class="glass-card telemetry-card total-card">
+          <h4>Total de Acessos Registrados</h4>
+          <span class="telemetry-number">{{ telemetryData?.totalAccesses || 0 }}</span>
+        </div>
+      </div>
+
+      <div class="telemetry-grids">
+        <!-- By Country -->
+        <div class="glass-card telemetry-table-card">
+          <h3>Acessos por País</h3>
+          <div class="scrollable-table">
+            <table class="telemetry-table">
+              <thead>
+                <tr>
+                  <th>País</th>
+                  <th>Acessos</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (c of telemetryData?.byCountry; track c.country) {
+                  <tr>
+                    <td>{{ c.country }}</td>
+                    <td><strong>{{ c.count }}</strong></td>
+                  </tr>
+                } @empty {
+                  <tr><td colspan="2" class="empty-cell">Nenhum dado registrado.</td></tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- By State -->
+        <div class="glass-card telemetry-table-card">
+          <h3>Acessos por Estado</h3>
+          <div class="scrollable-table">
+            <table class="telemetry-table">
+              <thead>
+                <tr>
+                  <th>Estado</th>
+                  <th>País</th>
+                  <th>Acessos</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (s of telemetryData?.byState; track s.state) {
+                  <tr>
+                    <td>{{ s.state }}</td>
+                    <td>{{ s.country }}</td>
+                    <td><strong>{{ s.count }}</strong></td>
+                  </tr>
+                } @empty {
+                  <tr><td colspan="3" class="empty-cell">Nenhum dado registrado.</td></tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- By City -->
+        <div class="glass-card telemetry-table-card">
+          <h3>Acessos por Cidade</h3>
+          <div class="scrollable-table">
+            <table class="telemetry-table">
+              <thead>
+                <tr>
+                  <th>Cidade</th>
+                  <th>Estado / País</th>
+                  <th>Acessos</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (city of telemetryData?.byCity; track city.city) {
+                  <tr>
+                    <td>{{ city.city }}</td>
+                    <td>{{ city.state }} ({{ city.country }})</td>
+                    <td><strong>{{ city.count }}</strong></td>
+                  </tr>
+                } @empty {
+                  <tr><td colspan="3" class="empty-cell">Nenhum dado registrado.</td></tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent logs -->
+      <div class="glass-card telemetry-logs-card" style="margin-top: 2rem;">
+        <h3>Registros de Acesso Recentes (Últimos 50)</h3>
+        <div class="scrollable-table logs-table">
+          <table class="telemetry-table">
+            <thead>
+              <tr>
+                <th>Data/Hora</th>
+                <th>Usuário</th>
+                <th>IP de Acesso</th>
+                <th>País</th>
+                <th>Estado</th>
+                <th>Cidade</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (log of telemetryData?.recentLogs; track log.id) {
+                <tr>
+                  <td class="timestamp-cell">{{ log.accessed_at }}</td>
+                  <td>{{ log.user_email || 'Visitante Anônimo' }}</td>
+                  <td><code>{{ log.ip_address }}</code></td>
+                  <td>{{ log.country }}</td>
+                  <td>{{ log.state }}</td>
+                  <td>{{ log.city }}</td>
+                </tr>
+              } @empty {
+                <tr><td colspan="6" class="empty-cell">Nenhum log de acesso disponível.</td></tr>
+              }
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
