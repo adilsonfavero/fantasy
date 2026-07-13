@@ -207,6 +207,12 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 10px rgba(255, 215, 0, 0.15);
 }
 
+/* Fix for Select Option Backgrounds in Dark Mode */
+select.form-control option {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(15px); }
