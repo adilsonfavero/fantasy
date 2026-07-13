@@ -567,3 +567,157 @@
   color: var(--text-secondary);
   white-space: nowrap;
 }
+
+/* ===== Event Sub-Tabs ===== */
+.subtab-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  padding: 0.55rem 1.2rem;
+  border-radius: 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.subtab-btn:hover {
+  background: rgba(255, 215, 0, 0.1);
+  border-color: rgba(255, 215, 0, 0.3);
+  color: var(--color-gold);
+}
+
+.subtab-btn.active {
+  background: rgba(255, 215, 0, 0.15);
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.15);
+}
+
+/* ===== Jersey Badge ===== */
+.jersey-badge-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  border: 2px solid;
+  flex-shrink: 0;
+  font-size: 1.5rem;
+}
+
+.jersey-badge-icon.small {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+}
+
+/* ===== Scoring Grid ===== */
+.scoring-rules-card {
+  padding: 1.75rem;
+}
+
+.scoring-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem;
+}
+
+.scoring-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+}
+
+.scoring-pos {
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--color-gold);
+  min-width: 28px;
+  text-align: right;
+}
+
+.scoring-pts-input {
+  width: 60px !important;
+  padding: 0.35rem 0.5rem !important;
+  text-align: center;
+  font-weight: 700;
+}
+
+.scoring-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* ===== Stage Results Layout ===== */
+.results-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 800px) {
+  .results-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.results-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.result-entry-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.result-pos-badge {
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--color-gold);
+  min-width: 28px;
+  text-align: center;
+}
+
+.result-pts-box {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+/* Form actions row */
+.form-actions-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-secondary);
+  padding: 0.65rem 1.2rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}

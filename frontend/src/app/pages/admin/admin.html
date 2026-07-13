@@ -182,6 +182,8 @@
   @if (activeTab() === 'athletes') {
     <div class="athletes-admin-workspace">
       
+      <!-- ===== SUB-TAB: EVENT INFO ===== -->
+      @if (activeEventSubTab() === 'event-info') {
       <!-- SECTION 1: EVENT / RACE MANAGEMENT -->
       <div class="admin-workspace" style="margin-bottom: 2rem;">
         <!-- Left: Event Form -->
@@ -309,10 +311,212 @@
           </div>
         </div>
       </div>
+      } <!-- /event-info sub-tab -->
 
-      <hr class="section-divider" style="margin: 2.5rem 0; border: 0; border-top: 1px solid rgba(255,255,255,0.1);" />
+      <!-- ===== EVENT SUB-TABS NAV ===== -->
+      <div class="event-subtabs-nav" style="display:flex; gap:0.75rem; margin: 2rem 0 1.5rem 0; flex-wrap: wrap;">
+        <button class="subtab-btn" [class.active]="activeEventSubTab() === 'event-info'" (click)="setEventSubTab('event-info')">📅 Evento & Histórico</button>
+        <button class="subtab-btn" [class.active]="activeEventSubTab() === 'jerseys'" (click)="setEventSubTab('jerseys')">👕 Camisas</button>
+        <button class="subtab-btn" [class.active]="activeEventSubTab() === 'scoring'" (click)="setEventSubTab('scoring')">🏅 Pontuação</button>
+        <button class="subtab-btn" [class.active]="activeEventSubTab() === 'results'" (click)="setEventSubTab('results')">📋 Resultado de Etapas</button>
+        <button class="subtab-btn" [class.active]="activeEventSubTab() === 'athletes-mgmt'" (click)="setEventSubTab('athletes-mgmt')">🚴 Atletas</button>
+      </div>
 
-      <h3 style="margin-bottom: 1.5rem; color: #fff; font-size: 1.35rem;">🚴‍♂️ Gerenciar Atletas do Evento Selecionado</h3>
+      <!-- ===== SUB-TAB: JERSEYS ===== -->
+
+      @if (activeEventSubTab() === 'jerseys') {
+        @if (!selectedRaceId()) {
+          <div class="glass-card" style="padding:2rem; text-align:center; color: var(--text-secondary);">
+            ⚠️ Selecione um evento no Histórico antes de gerenciar as camisas.
+          </div>
+        } @else {
+          <div class="admin-workspace">
+            <!-- Left: Jersey Form -->
+            <div class="workspace-left">
+              <div class="glass-card form-card" [class.editing-mode]="editingJerseyId()">
+                <h3>{{ editingJerseyId() ? 'Editar Camisa' : 'Nova Camisa de Classificação' }}</h3>
+                <form (ngSubmit)="onSubmitJersey()" #jerseyForm="ngForm">
+                  <div class="form-group">
+                    <label for="jName" class="form-label">Nome da Camisa</label>
+                    <input type="text" id="jName" name="jName" class="form-control" [(ngModel)]="jerseyName" required placeholder="Ex: Camisola Amarela (Líder Geral)"/>
+                  </div>
+                  <div class="form-group">
+                    <label for="jColor" class="form-label">Cor da Camisa</label>
+                    <div style="display:flex; gap:0.75rem; align-items:center;">
+                      <input type="color" id="jColor" name="jColor" [(ngModel)]="jerseyColor" style="width:50px; height:40px; padding:2px; border-radius:8px; border:1px solid var(--border-card); background:transparent; cursor:pointer;"/>
+                      <span class="jersey-color-preview" [style.background]="jerseyColor" style="width:80px; height:40px; border-radius:8px; display:inline-block; border:2px solid rgba(255,255,255,0.2);"></span>
+                      <span style="color: var(--text-secondary); font-size:0.85rem;">{{ jerseyColor }}</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="jIcon" class="form-label">Ícone / Emoji</label>
+                    <input type="text" id="jIcon" name="jIcon" class="form-control" [(ngModel)]="jerseyIcon" placeholder="Ex: 🟡 👕 🔴"/>
+                  </div>
+                  <div class="form-group">
+                    <label for="jPts" class="form-label">Pontos por Etapa Vestida</label>
+                    <input type="number" id="jPts" name="jPts" class="form-control" [(ngModel)]="jerseyPointsPerStage" min="0" required/>
+                  </div>
+                  <div class="form-actions-row">
+                    <button type="submit" class="btn btn-primary" style="flex:1;" [disabled]="jerseyForm.invalid || isSubmitting()">
+                      {{ editingJerseyId() ? 'Salvar 💾' : 'Criar Camisa 👕' }}
+                    </button>
+                    @if (editingJerseyId()) {
+                      <button type="button" class="btn btn-secondary" (click)="cancelEditJersey()">Cancelar</button>
+                    }
+                  </div>
+                </form>
+              </div>
+            </div>
+            <!-- Right: Jersey List -->
+            <div class="workspace-right">
+              <div class="glass-card list-view-card">
+                <h3>Camisas do Evento Selecionado</h3>
+                <div class="admin-list-container scrollable-list">
+                  @for (jersey of jerseyTypes; track jersey.id) {
+                    <div class="admin-row-item" [class.editing-highlight]="editingJerseyId() === jersey.id">
+                      <div class="jersey-badge-icon" [style.background]="jersey.color + '33'" [style.border-color]="jersey.color">
+                        <span style="font-size:1.5rem;">{{ jersey.icon }}</span>
+                      </div>
+                      <div class="item-mini-info">
+                        <h4>{{ jersey.name }}</h4>
+                        <p class="desc-preview">{{ jersey.points_per_stage }} pts/etapa • <span [style.color]="jersey.color">⬤ {{ jersey.color }}</span></p>
+                      </div>
+                      <div class="item-row-actions">
+                        <button (click)="startEditJersey(jersey)" class="btn-action-edit" title="Editar">✏️</button>
+                        <button (click)="deleteJersey(jersey.id!)" class="btn-action-delete" title="Excluir">🗑️</button>
+                      </div>
+                    </div>
+                  } @empty {
+                    <p class="no-items-msg">Nenhuma camisa cadastrada. Crie a primeira à esquerda.</p>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      }
+
+      <!-- ===== SUB-TAB: SCORING RULES ===== -->
+      @if (activeEventSubTab() === 'scoring') {
+        @if (!selectedRaceId()) {
+          <div class="glass-card" style="padding:2rem; text-align:center; color: var(--text-secondary);">
+            ⚠️ Selecione um evento no Histórico antes de editar a pontuação.
+          </div>
+        } @else {
+          <div class="glass-card scoring-rules-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+              <h3 style="margin:0;">🏅 Tabela de Pontos por Posição de Chegada</h3>
+              <button class="btn btn-primary" (click)="saveScoringRules()" [disabled]="isSubmitting()">
+                {{ isSubmitting() ? 'Salvando...' : 'Salvar Tabela 💾' }}
+              </button>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">
+              Defina quantos pontos cada posição de chegada rende ao atleta na equipe fantasy do usuário.
+            </p>
+            <div class="scoring-grid">
+              @for (rule of scoringRules; track rule.position) {
+                <div class="scoring-row">
+                  <div class="scoring-pos">{{ rule.position }}º</div>
+                  <input
+                    type="number"
+                    class="form-control scoring-pts-input"
+                    [(ngModel)]="rule.points"
+                    min="0"
+                    [name]="'pts_' + rule.position"
+                  />
+                  <span class="scoring-label">pts</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      }
+
+      <!-- ===== SUB-TAB: STAGE RESULTS ===== -->
+      @if (activeEventSubTab() === 'results') {
+        @if (!selectedRaceId()) {
+          <div class="glass-card" style="padding:2rem; text-align:center; color: var(--text-secondary);">
+            ⚠️ Selecione um evento no Histórico antes de registrar resultados.
+          </div>
+        } @else {
+          <div class="glass-card results-card" style="padding: 1.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
+              <h3 style="margin:0;">📋 Resultado da Etapa</h3>
+              <!-- Stage Selector -->
+              <select class="form-control event-select-dropdown" style="min-width:280px; max-width:380px;"
+                (change)="onStageSelect(+$any($event.target).value)">
+                @for (stage of stages; track stage.id) {
+                  <option [value]="stage.id" [selected]="selectedStageId() === stage.id">
+                    Etapa {{ stage.stage_number }} — {{ stage.start_location }} → {{ stage.end_location }} ({{ stage.date | date:'dd/MM' : 'UTC' }})
+                  </option>
+                }
+              </select>
+            </div>
+
+            <div class="results-layout">
+              <!-- Left: Finishers -->
+              <div class="results-col">
+                <h4 style="margin-bottom:1rem; color: var(--color-gold);">🏁 Classificação de Chegada</h4>
+                @for (entry of stageResultEntries; track entry.position) {
+                  <div class="result-entry-row">
+                    <span class="result-pos-badge">{{ entry.position }}º</span>
+                    <select class="form-control" style="flex:1;"
+                      (change)="onResultAthleteChange(entry.position - 1, $any($event.target).value)">
+                      <option value="">— Selecionar Atleta —</option>
+                      @for (ath of athletes; track ath.id) {
+                        <option [value]="ath.id" [selected]="entry.athlete_id === ath.id">{{ ath.name }}</option>
+                      }
+                    </select>
+                    <div class="result-pts-box">
+                      <input type="number" class="form-control scoring-pts-input" [(ngModel)]="entry.points_awarded" min="0" [name]="'rpts_' + entry.position"/>
+                      <span class="scoring-label" style="font-size:0.75rem;">pts</span>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <!-- Right: Jersey Leaders -->
+              <div class="results-col">
+                <h4 style="margin-bottom:1rem; color: var(--color-gold);">👕 Líderes de Camisa Nesta Etapa</h4>
+                @if (jerseyTypes.length === 0) {
+                  <p class="no-items-msg">Nenhuma camisa cadastrada para este evento.</p>
+                }
+                @for (entry of jerseyLeaderEntries; track entry.jersey_type_id) {
+                  @for (jt of jerseyTypes; track jt.id) {
+                    @if (jt.id === entry.jersey_type_id) {
+                      <div class="result-entry-row">
+                        <span class="jersey-badge-icon small" [style.background]="jt.color + '33'" [style.border-color]="jt.color">{{ jt.icon }}</span>
+                        <div class="item-mini-info" style="flex:1;">
+                          <span style="font-size:0.85rem; font-weight:600;">{{ jt.name }}</span>
+                          <span style="font-size:0.75rem; color: var(--text-secondary);">+{{ jt.points_per_stage }} pts</span>
+                        </div>
+                        <select class="form-control" style="flex:1; max-width:200px;"
+                          [(ngModel)]="entry.athlete_id" [name]="'jl_' + entry.jersey_type_id">
+                          <option [ngValue]="null">— Sem líder —</option>
+                          @for (ath of athletes; track ath.id) {
+                            <option [ngValue]="ath.id">{{ ath.name }}</option>
+                          }
+                        </select>
+                      </div>
+                    }
+                  }
+                }
+              </div>
+            </div>
+
+            <div style="margin-top:1.5rem; display:flex; justify-content:flex-end;">
+              <button class="btn btn-primary" style="min-width:200px;" (click)="saveStageData()" [disabled]="isSubmitting()">
+                {{ isSubmitting() ? 'Salvando...' : 'Salvar Resultado da Etapa 💾' }}
+              </button>
+            </div>
+          </div>
+        }
+      }
+
+      <!-- ===== SUB-TAB: ATHLETES MANAGEMENT ===== -->
+      @if (activeEventSubTab() === 'athletes-mgmt') {
+        <h3 style="margin-bottom: 1.5rem; color: #fff; font-size: 1.35rem;">🚴‍♂️ Gerenciar Atletas do Evento Selecionado</h3>
+
       <!-- Race Selector Dropdown -->
       <div class="glass-card selector-card">
         <label for="raceSelect" class="form-label" style="display:inline-block; margin-right:1rem; font-weight:600;">
@@ -470,6 +674,7 @@
         </div>
 
       </div>
+      } <!-- /athletes-mgmt sub-tab -->
     </div>
   }
 

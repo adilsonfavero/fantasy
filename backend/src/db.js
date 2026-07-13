@@ -181,6 +181,40 @@ async function initDatabase() {
       ALTER TABLE users ADD COLUMN IF NOT EXISTS country VARCHAR(100);
       ALTER TABLE users ADD COLUMN IF NOT EXISTS state VARCHAR(100);
       ALTER TABLE users ADD COLUMN IF NOT EXISTS city VARCHAR(100);
+
+      CREATE TABLE IF NOT EXISTS scoring_rules (
+        id SERIAL PRIMARY KEY,
+        race_id INT REFERENCES races(id) ON DELETE CASCADE,
+        position INT NOT NULL,
+        points INT NOT NULL DEFAULT 0,
+        CONSTRAINT unique_race_position UNIQUE (race_id, position)
+      );
+
+      CREATE TABLE IF NOT EXISTS jersey_types (
+        id SERIAL PRIMARY KEY,
+        race_id INT REFERENCES races(id) ON DELETE CASCADE,
+        name VARCHAR(100) NOT NULL,
+        color VARCHAR(20) NOT NULL DEFAULT '#FFFFFF',
+        icon VARCHAR(10) DEFAULT '👕',
+        points_per_stage INT NOT NULL DEFAULT 10
+      );
+
+      CREATE TABLE IF NOT EXISTS stage_results (
+        id SERIAL PRIMARY KEY,
+        stage_id INT REFERENCES race_stages(id) ON DELETE CASCADE,
+        athlete_id INT REFERENCES athletes(id) ON DELETE CASCADE,
+        position INT NOT NULL,
+        points_awarded INT NOT NULL DEFAULT 0,
+        CONSTRAINT unique_stage_position UNIQUE (stage_id, position)
+      );
+
+      CREATE TABLE IF NOT EXISTS stage_jersey_leaders (
+        id SERIAL PRIMARY KEY,
+        stage_id INT REFERENCES race_stages(id) ON DELETE CASCADE,
+        jersey_type_id INT REFERENCES jersey_types(id) ON DELETE CASCADE,
+        athlete_id INT REFERENCES athletes(id) ON DELETE CASCADE,
+        CONSTRAINT unique_stage_jersey UNIQUE (stage_id, jersey_type_id)
+      );
     `);
     
     // Set start and end dates for existing races that do not have them
@@ -384,6 +418,46 @@ async function initDatabase() {
           `, [tdfId, stage.num, stage.date, escStart, escEnd, stage.dist, stage.type, '/cycling_stage_profile.png']);
         }
         console.log('Etapas do Tour de France semeadas com sucesso!');
+      }
+
+      // Seed default scoring rules for all races if empty
+      const scoringCheck = await client.query('SELECT COUNT(*) FROM scoring_rules');
+      if (parseInt(scoringCheck.rows[0].count) === 0) {
+        console.log('Semeando tabela de pontuação padrão para todas as provas...');
+        const allRaces = await client.query('SELECT id FROM races');
+        const defaultPoints = [
+          [1, 50], [2, 30], [3, 20], [4, 16], [5, 14],
+          [6, 12], [7, 10], [8, 8], [9, 6], [10, 5],
+          [11, 4], [12, 3], [13, 2], [14, 1], [15, 1],
+          [16, 0], [17, 0], [18, 0], [19, 0], [20, 0]
+        ];
+        for (const race of allRaces.rows) {
+          for (const [pos, pts] of defaultPoints) {
+            await client.query(
+              'INSERT INTO scoring_rules (race_id, position, points) VALUES ($1, $2, $3) ON CONFLICT (race_id, position) DO NOTHING',
+              [race.id, pos, pts]
+            );
+          }
+        }
+        console.log('Tabela de pontuação padrão semeada com sucesso!');
+      }
+
+      // Seed 4 default jersey types for Tour de France (race_id=1) if empty
+      const jerseyCheck = await client.query('SELECT COUNT(*) FROM jersey_types');
+      if (parseInt(jerseyCheck.rows[0].count) === 0) {
+        console.log('Semeando camisas de classificação padrão do Tour de France...');
+        const tdfRes2 = await client.query("SELECT id FROM races WHERE name = 'Tour de France' LIMIT 1");
+        if (tdfRes2.rows.length > 0) {
+          const tdfRaceId = tdfRes2.rows[0].id;
+          await client.query(`
+            INSERT INTO jersey_types (race_id, name, color, icon, points_per_stage) VALUES
+            ($1, 'Camisola Amarela (Líder Geral)', '#FFD700', '🟡', 10),
+            ($1, 'Camisola Verde (Líder de Pontos)', '#22C55E', '🟢', 8),
+            ($1, 'Camisola de Bolinhas (Líder de Montanha)', '#EF4444', '🔴', 6),
+            ($1, 'Camisola Branca (Líder Jovem)', '#F8FAFC', '⚪', 5)
+          `, [tdfRaceId]);
+          console.log('Camisas padrão do Tour de France semeadas com sucesso!');
+        }
       }
       
       console.log('Carregamento inicial de dados concluído com sucesso!');

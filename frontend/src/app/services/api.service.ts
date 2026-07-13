@@ -49,6 +49,45 @@ export interface Team {
   athletes?: Athlete[];
 }
 
+export interface JerseyType {
+  id?: number;
+  race_id: number;
+  name: string;
+  color: string;
+  icon: string;
+  points_per_stage: number;
+}
+
+export interface ScoringRule {
+  id?: number;
+  race_id: number;
+  position: number;
+  points: number;
+}
+
+export interface StageResult {
+  id?: number;
+  stage_id: number;
+  athlete_id: number;
+  athlete_name?: string;
+  nationality?: string;
+  official_team?: string;
+  position: number;
+  points_awarded: number;
+}
+
+export interface StageJerseyLeader {
+  id?: number;
+  stage_id: number;
+  jersey_type_id: number;
+  athlete_id: number;
+  jersey_name?: string;
+  jersey_color?: string;
+  jersey_icon?: string;
+  points_per_stage?: number;
+  athlete_name?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -162,5 +201,49 @@ export class ApiService {
 
   getTelemetrySummary(): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/telemetry`);
+  }
+
+  // --- Jersey Types ---
+  getJerseyTypes(raceId: number): Observable<JerseyType[]> {
+    return this.http.get<JerseyType[]>(`${this.baseUrl}/races/${raceId}/jerseys`);
+  }
+
+  addJerseyType(raceId: number, jersey: Omit<JerseyType, 'id' | 'race_id'>): Observable<{ message: string, jersey: JerseyType }> {
+    return this.http.post<{ message: string, jersey: JerseyType }>(`${this.baseUrl}/races/${raceId}/jerseys`, jersey);
+  }
+
+  updateJerseyType(id: number, jersey: Omit<JerseyType, 'id' | 'race_id'>): Observable<{ message: string, jersey: JerseyType }> {
+    return this.http.put<{ message: string, jersey: JerseyType }>(`${this.baseUrl}/races/jerseys/${id}`, jersey);
+  }
+
+  deleteJerseyType(id: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.baseUrl}/races/jerseys/${id}`);
+  }
+
+  // --- Scoring Rules ---
+  getScoringRules(raceId: number): Observable<ScoringRule[]> {
+    return this.http.get<ScoringRule[]>(`${this.baseUrl}/races/${raceId}/scoring-rules`);
+  }
+
+  saveScoringRules(raceId: number, rules: { position: number, points: number }[]): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.baseUrl}/races/${raceId}/scoring-rules`, { rules });
+  }
+
+  // --- Stage Results ---
+  getStageResults(stageId: number): Observable<StageResult[]> {
+    return this.http.get<StageResult[]>(`${this.baseUrl}/races/stages/${stageId}/results`);
+  }
+
+  saveStageResults(stageId: number, results: { position: number, athlete_id: number | null, points_awarded: number }[]): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.baseUrl}/races/stages/${stageId}/results`, { results });
+  }
+
+  // --- Stage Jersey Leaders ---
+  getStageJerseyLeaders(stageId: number): Observable<StageJerseyLeader[]> {
+    return this.http.get<StageJerseyLeader[]>(`${this.baseUrl}/races/stages/${stageId}/jersey-leaders`);
+  }
+
+  saveStageJerseyLeaders(stageId: number, leaders: { jersey_type_id: number, athlete_id: number | null }[]): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.baseUrl}/races/stages/${stageId}/jersey-leaders`, { leaders });
   }
 }

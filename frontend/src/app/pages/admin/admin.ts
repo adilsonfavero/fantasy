@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ApiService, Sponsor, Race, Athlete, User } from '../../services/api.service';
+import { ApiService, Sponsor, Race, Athlete, User, JerseyType, ScoringRule, StageResult, StageJerseyLeader } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -57,6 +57,28 @@ export class AdminComponent implements OnInit {
   // Telemetry State
   telemetryData: any = null;
 
+  // ---- Jersey Types State ----
+  jerseyTypes: JerseyType[] = [];
+  jerseyName = '';
+  jerseyColor = '#FFD700';
+  jerseyIcon = '👕';
+  jerseyPointsPerStage = 10;
+  editingJerseyId = signal<number | null>(null);
+
+  // ---- Scoring Rules State ----
+  scoringRules: ScoringRule[] = [];
+
+  // ---- Stage Results State ----
+  stages: any[] = [];
+  selectedStageId = signal<number | null>(null);
+  stageResultEntries: { position: number; athlete_id: number | null; points_awarded: number }[] = [];
+  jerseyLeaderEntries: { jersey_type_id: number; athlete_id: number | null }[] = [];
+  savedStageResults: StageResult[] = [];
+  savedJerseyLeaders: StageJerseyLeader[] = [];
+
+  // Active event sub-tab: 'event-info' | 'jerseys' | 'scoring' | 'results' | 'athletes-mgmt'
+  activeEventSubTab = signal<'event-info' | 'jerseys' | 'scoring' | 'results' | 'athletes-mgmt'>('event-info');
+
   ngOnInit(): void {
     this.loadSponsors();
     this.loadRaces();
@@ -64,6 +86,7 @@ export class AdminComponent implements OnInit {
 
   setTab(tab: 'sponsors' | 'athletes' | 'users' | 'telemetry'): void {
     this.activeTab.set(tab);
+    this.activeEventSubTab.set('event-info');
     this.errorMessage = '';
     this.successMessage = '';
     
@@ -76,6 +99,20 @@ export class AdminComponent implements OnInit {
       this.loadAthletesForSelectedRace();
     } else if (tab === 'telemetry') {
       this.loadTelemetry();
+    }
+  }
+
+  setEventSubTab(sub: 'event-info' | 'jerseys' | 'scoring' | 'results' | 'athletes-mgmt'): void {
+    this.activeEventSubTab.set(sub);
+    this.errorMessage = '';
+    this.successMessage = '';
+    const raceId = this.selectedRaceId();
+    if (!raceId) return;
+    if (sub === 'jerseys') this.loadJerseyTypes(raceId);
+    if (sub === 'scoring') this.loadScoringRules(raceId);
+    if (sub === 'results') {
+      this.loadStages(raceId);
+      this.loadJerseyTypes(raceId);
     }
   }
 
@@ -511,5 +548,194 @@ export class AdminComponent implements OnInit {
     this.raceStartDate = '';
     this.raceEndDate = '';
     this.errorMessage = '';
+  }
+
+  // ---- Jersey Types Methods ----
+  loadJerseyTypes(raceId: number): void {
+    this.apiService.getJerseyTypes(raceId).subscribe({
+      next: (data) => { this.jerseyTypes = data; },
+      error: (err) => console.error('Error loading jersey types:', err)
+    });
+  }
+
+  onSubmitJersey(): void {
+    const raceId = this.selectedRaceId();
+    if (!raceId || !this.jerseyName) {
+      this.errorMessage = 'Selecione um evento e preencha o nome da camisa.';
+      return;
+    }
+    this.isSubmitting.set(true);
+    this.errorMessage = '';
+    this.successMessage = '';
+    const jerseyData = { name: this.jerseyName, color: this.jerseyColor, icon: this.jerseyIcon, points_per_stage: this.jerseyPointsPerStage };
+    const editId = this.editingJerseyId();
+    const obs$ = editId
+      ? this.apiService.updateJerseyType(editId, jerseyData)
+      : this.apiService.addJerseyType(raceId, jerseyData);
+
+    obs$.subscribe({
+      next: () => {
+        this.successMessage = editId ? 'Camisa atualizada com sucesso!' : 'Camisa criada com sucesso!';
+        this.cancelEditJersey();
+        this.loadJerseyTypes(raceId);
+        this.isSubmitting.set(false);
+      },
+      error: (err) => {
+        this.errorMessage = err.error?.message || 'Erro ao salvar camisa.';
+        this.isSubmitting.set(false);
+      }
+    });
+  }
+
+  startEditJersey(jersey: JerseyType): void {
+    this.editingJerseyId.set(jersey.id!);
+    this.jerseyName = jersey.name;
+    this.jerseyColor = jersey.color;
+    this.jerseyIcon = jersey.icon;
+    this.jerseyPointsPerStage = jersey.points_per_stage;
+    this.errorMessage = '';
+    this.successMessage = '';
+  }
+
+  cancelEditJersey(): void {
+    this.editingJerseyId.set(null);
+    this.jerseyName = '';
+    this.jerseyColor = '#FFD700';
+    this.jerseyIcon = '👕';
+    this.jerseyPointsPerStage = 10;
+    this.errorMessage = '';
+  }
+
+  deleteJersey(id: number): void {
+    if (!confirm('Deseja realmente remover esta camisa?')) return;
+    this.apiService.deleteJerseyType(id).subscribe({
+      next: () => {
+        this.successMessage = 'Camisa removida com sucesso!';
+        const raceId = this.selectedRaceId();
+        if (raceId) this.loadJerseyTypes(raceId);
+      },
+      error: () => { this.errorMessage = 'Erro ao remover camisa.'; }
+    });
+  }
+
+  // ---- Scoring Rules Methods ----
+  loadScoringRules(raceId: number): void {
+    this.apiService.getScoringRules(raceId).subscribe({
+      next: (data) => {
+        // If no rules saved yet, build default 20 positions
+        if (data.length === 0) {
+          const defaults = [50, 30, 20, 16, 14, 12, 10, 8, 6, 5, 4, 3, 2, 1, 1, 0, 0, 0, 0, 0];
+          this.scoringRules = defaults.map((pts, i) => ({ race_id: raceId, position: i + 1, points: pts }));
+        } else {
+          this.scoringRules = data;
+        }
+      },
+      error: (err) => console.error('Error loading scoring rules:', err)
+    });
+  }
+
+  saveScoringRules(): void {
+    const raceId = this.selectedRaceId();
+    if (!raceId) return;
+    this.isSubmitting.set(true);
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.apiService.saveScoringRules(raceId, this.scoringRules.map(r => ({ position: r.position, points: r.points }))).subscribe({
+      next: () => {
+        this.successMessage = 'Tabela de pontuação salva com sucesso!';
+        this.isSubmitting.set(false);
+      },
+      error: (err) => {
+        this.errorMessage = err.error?.message || 'Erro ao salvar pontuação.';
+        this.isSubmitting.set(false);
+      }
+    });
+  }
+
+  // ---- Stage Results Methods ----
+  loadStages(raceId: number): void {
+    this.apiService.getRaceStages(raceId).subscribe({
+      next: (data) => {
+        this.stages = data;
+        // Auto-select first stage if none selected
+        if (data.length > 0 && !this.selectedStageId()) {
+          this.selectedStageId.set(data[0].id);
+          this.loadStageData(data[0].id);
+        }
+      },
+      error: (err) => console.error('Error loading stages:', err)
+    });
+  }
+
+  onStageSelect(stageId: number): void {
+    this.selectedStageId.set(stageId);
+    this.loadStageData(stageId);
+  }
+
+  loadStageData(stageId: number): void {
+    // Load saved results
+    this.apiService.getStageResults(stageId).subscribe({
+      next: (data) => {
+        this.savedStageResults = data;
+        // Rebuild result entries (top 10 positions)
+        this.stageResultEntries = Array.from({ length: 10 }, (_, i) => {
+          const existing = data.find(r => r.position === i + 1);
+          const rule = this.scoringRules.find(r => r.position === i + 1);
+          return { position: i + 1, athlete_id: existing?.athlete_id ?? null, points_awarded: existing?.points_awarded ?? rule?.points ?? 0 };
+        });
+      },
+      error: (err) => console.error('Error loading stage results:', err)
+    });
+    // Load saved jersey leaders
+    this.apiService.getStageJerseyLeaders(stageId).subscribe({
+      next: (data) => {
+        this.savedJerseyLeaders = data;
+        // Rebuild jersey leader entries from current jersey types
+        this.jerseyLeaderEntries = this.jerseyTypes.map(jt => {
+          const existing = data.find(l => l.jersey_type_id === jt.id);
+          return { jersey_type_id: jt.id!, athlete_id: existing?.athlete_id ?? null };
+        });
+      },
+      error: (err) => console.error('Error loading jersey leaders:', err)
+    });
+  }
+
+  onResultAthleteChange(index: number, athleteId: string): void {
+    const id = athleteId ? parseInt(athleteId) : null;
+    this.stageResultEntries[index].athlete_id = id;
+    // Auto-fill points from scoring rules
+    if (id) {
+      const rule = this.scoringRules.find(r => r.position === index + 1);
+      if (rule) this.stageResultEntries[index].points_awarded = rule.points;
+    }
+  }
+
+  saveStageData(): void {
+    const stageId = this.selectedStageId();
+    if (!stageId) return;
+    this.isSubmitting.set(true);
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    // Save results and jersey leaders in parallel using nested subscribes (simple approach)
+    this.apiService.saveStageResults(stageId, this.stageResultEntries).subscribe({
+      next: () => {
+        this.apiService.saveStageJerseyLeaders(stageId, this.jerseyLeaderEntries).subscribe({
+          next: () => {
+            this.successMessage = 'Resultado e camisas da etapa salvos com sucesso!';
+            this.loadStageData(stageId);
+            this.isSubmitting.set(false);
+          },
+          error: (err) => {
+            this.errorMessage = err.error?.message || 'Erro ao salvar camisas da etapa.';
+            this.isSubmitting.set(false);
+          }
+        });
+      },
+      error: (err) => {
+        this.errorMessage = err.error?.message || 'Erro ao salvar resultado da etapa.';
+        this.isSubmitting.set(false);
+      }
+    });
   }
 }
