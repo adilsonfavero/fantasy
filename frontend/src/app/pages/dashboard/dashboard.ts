@@ -19,11 +19,6 @@ export class DashboardComponent implements OnInit {
   isLoading = true;
   errorMessage = '';
 
-  // Stages viewer state
-  stages: any[] = [];
-  selectedStagesRaceName = '';
-  showStagesPanel = false;
-  isStagesLoading = false;
 
   ngOnInit(): void {
     this.loadDashboardData();
@@ -68,27 +63,4 @@ export class DashboardComponent implements OnInit {
     return this.userTeams.find(t => t.race_id === raceId);
   }
 
-  // Load and show stages for a race
-  viewStages(race: Race): void {
-    this.selectedStagesRaceName = race.name;
-    this.showStagesPanel = true;
-    this.isStagesLoading = true;
-    this.stages = [];
-
-    this.apiService.getRaceStages(race.id).subscribe({
-      next: (data) => {
-        this.stages = data;
-        this.isStagesLoading = false;
-      },
-      error: (err) => {
-        console.error('Error fetching stages:', err);
-        this.errorMessage = 'Erro ao carregar etapas desta prova.';
-        this.isStagesLoading = false;
-      }
-    });
-  }
-
-  closeStages(): void {
-    this.showStagesPanel = false;
-  }
 }

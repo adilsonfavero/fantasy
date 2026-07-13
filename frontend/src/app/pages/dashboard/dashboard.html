@@ -62,57 +62,15 @@
         </a>
         }
 
-        <button (click)="viewStages(race)" class="btn btn-secondary btn-block-stages"
-          style="margin-top: 0.5rem; width: 100%;">
+        <a [routerLink]="['/stages', race.id]" class="btn btn-secondary btn-block-stages"
+          style="margin-top: 0.5rem; width: 100%; text-decoration: none; display: flex; align-items: center; justify-content: center;">
           Ver Etapas 📅
-        </button>
+        </a>
       </div>
     </div>
     }
   </div>
   }
 
-  <!-- Stages Slide-over Panel -->
-  @if (showStagesPanel) {
-  <div class="stages-overlay animate-fade-in" (click)="closeStages()">
-    <div class="stages-sidebar glass-card" (click)="$event.stopPropagation()">
-      <div class="stages-sidebar-header">
-        <h3>Etapas: {{ selectedStagesRaceName }}</h3>
-        <button class="btn-close-stages" (click)="closeStages()">✕</button>
-      </div>
 
-      @if (isStagesLoading) {
-      <div class="spinner-container" style="margin-top: 4rem;">
-        <div class="spinner"></div>
-      </div>
-      } @else {
-      <div class="stages-listscroll">
-        @for (stage of stages; track stage.id) {
-        <div class="stage-item-card">
-          <div class="stage-item-header">
-            <div class="stage-num-badge">Etapa {{ stage.stage_number }}</div>
-            <div class="stage-route-info">
-              <h4>{{ stage.start_location }} ➔ {{ stage.end_location }}</h4>
-              <div class="stage-meta-row">
-                <span class="stage-meta-pill date-pill">📅 {{ stage.date }}</span>
-                <span class="stage-meta-pill dist-pill">📏 {{ stage.distance_km }} km</span>
-                <span class="stage-meta-pill type-pill" [attr.data-type]="stage.profile_type">⛰️ {{ stage.profile_type
-                  }}</span>
-              </div>
-            </div>
-          </div>
-          @if (stage.image_url) {
-          <div class="stage-profile-img-container">
-            <img [src]="stage.image_url" alt="Perfil do terreno da etapa" class="stage-profile-img" />
-          </div>
-          }
-        </div>
-        } @empty {
-        <p class="no-items-msg">Nenhuma etapa cadastrada para esta prova.</p>
-        }
-      </div>
-      }
-    </div>
-  </div>
-  }
 </div>

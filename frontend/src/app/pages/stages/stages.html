@@ -1,0 +1,56 @@
+<div class="stages-container animate-fade-in">
+  <div class="stages-header glass-card">
+    <div class="header-top">
+      <a routerLink="/dashboard" class="btn-back">⬅ Voltar ao Painel</a>
+      <span class="badge-gt">Grand Tour</span>
+    </div>
+    @if (race()) {
+      <h1 class="race-title">Etapas: {{ race()?.name }}</h1>
+      <p class="race-period">📅 Período: <strong>{{ race()?.start_date | date: 'dd/MM/yyyy' : 'UTC' }}</strong> a <strong>{{ race()?.end_date | date: 'dd/MM/yyyy' : 'UTC' }}</strong></p>
+      <p class="race-desc">{{ race()?.description }}</p>
+    }
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">{{ errorMessage() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Carregando as etapas...</p>
+    </div>
+  } @else {
+    <div class="stages-list">
+      @for (stage of stages(); track stage.id; let idx = $index) {
+        <div 
+          class="stage-card glass-card" 
+          [id]="'stage-card-' + idx" 
+          [class.closest-stage-highlight]="stage.isClosest"
+        >
+          <div class="stage-card-header">
+            <div class="stage-badge">Etapa {{ stage.stage_number }}</div>
+            @if (stage.isClosest) {
+              <span class="active-badge">Etapa de Hoje 🌟</span>
+            }
+          </div>
+          
+          <div class="stage-info">
+            <h3>{{ stage.start_location }} ➔ {{ stage.end_location }}</h3>
+            <div class="stage-meta">
+              <span class="meta-pill date">📅 {{ stage.date | date: 'dd/MM/yyyy' : 'UTC' }}</span>
+              <span class="meta-pill distance">📏 {{ stage.distance_km }} km</span>
+              <span class="meta-pill type" [attr.data-type]="stage.profile_type">⛰️ {{ stage.profile_type }}</span>
+            </div>
+          </div>
+
+          @if (stage.image_url) {
+            <div class="stage-profile-img-container">
+              <img [src]="stage.image_url" alt="Perfil da etapa" class="stage-profile-img" />
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>
