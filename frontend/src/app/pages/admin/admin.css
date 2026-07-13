@@ -97,6 +97,17 @@
   padding-left: 0.75rem;
 }
 
+/* Editing mode visual feedback */
+.form-card.editing-mode {
+  border-color: rgba(255, 215, 0, 0.4);
+  box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.2), 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.admin-row-item.editing-highlight {
+  border-color: rgba(255, 215, 0, 0.5);
+  background: rgba(255, 215, 0, 0.05);
+}
+
 .users-card-header {
   margin-bottom: 2rem;
 }

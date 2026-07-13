@@ -47,10 +47,10 @@
   <!-- Tab 1: Sponsors -->
   @if (activeTab() === 'sponsors') {
     <div class="admin-workspace">
-      <!-- Left Column: Create Sponsor Form -->
+      <!-- Left Column: Create/Edit Sponsor Form -->
       <div class="workspace-left">
-        <div class="glass-card form-card">
-          <h3>Cadastrar Novo Patrocinador</h3>
+        <div class="glass-card form-card" [class.editing-mode]="editingSponsorId()">
+          <h3>{{ editingSponsorId() ? 'Editar Patrocinador' : 'Cadastrar Novo Patrocinador' }}</h3>
           
           <form (ngSubmit)="onSubmitSponsor()" #sponsorForm="ngForm">
             <div class="form-group">
@@ -103,17 +103,32 @@
               ></textarea>
             </div>
 
-            <button 
-              type="submit" 
-              class="btn btn-primary btn-block-save"
-              [disabled]="sponsorForm.invalid || isSubmitting()"
-            >
-              @if (isSubmitting()) {
-                Cadastrando...
-              } @else {
-                Cadastrar Patrocinador 🏢
+            <div class="form-actions-row">
+              <button 
+                type="submit" 
+                class="btn btn-primary"
+                style="flex: 1;"
+                [disabled]="sponsorForm.invalid || isSubmitting()"
+              >
+                @if (isSubmitting()) {
+                  Salvando...
+                } @else if (editingSponsorId()) {
+                  Salvar Alterações 💾
+                } @else {
+                  Cadastrar Patrocinador 🏢
+                }
+              </button>
+
+              @if (editingSponsorId()) {
+                <button 
+                  type="button" 
+                  class="btn btn-secondary"
+                  (click)="cancelEditSponsor()"
+                >
+                  Cancelar
+                </button>
               }
-            </button>
+            </div>
           </form>
         </div>
       </div>
@@ -130,7 +145,7 @@
           } @else {
             <div class="admin-list-container">
               @for (sponsor of sponsors; track sponsor.id) {
-                <div class="admin-row-item">
+                <div class="admin-row-item" [class.editing-highlight]="editingSponsorId() === sponsor.id">
                   <div class="item-mini-logo">
                     @if (sponsor.logo_url) {
                       <img [src]="sponsor.logo_url" [alt]="sponsor.name" />
@@ -142,11 +157,16 @@
                     <h4>{{ sponsor.name }}</h4>
                     <p class="desc-preview">{{ sponsor.description }}</p>
                   </div>
-                  @if (sponsor.id) {
-                    <button (click)="deleteSponsor(sponsor.id)" class="btn-action-delete" title="Excluir patrocinador">
-                      🗑️
+                  <div class="item-row-actions">
+                    <button (click)="startEditSponsor(sponsor)" class="btn-action-edit" title="Editar patrocinador">
+                      ✏️
                     </button>
-                  }
+                    @if (sponsor.id) {
+                      <button (click)="deleteSponsor(sponsor.id)" class="btn-action-delete" title="Excluir patrocinador">
+                        🗑️
+                      </button>
+                    }
+                  </div>
                 </div>
               } @empty {
                 <p class="no-items-msg">Nenhum patrocinador cadastrado ainda.</p>

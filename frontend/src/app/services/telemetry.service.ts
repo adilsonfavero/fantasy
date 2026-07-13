@@ -11,44 +11,26 @@ export class TelemetryService {
   private readonly telemetryUrl = `${environment.apiUrl}/telemetry`;
 
   trackAccess(): void {
-    // Prevent tracking multiple times in the same session tab
+    // Prevent double tracking in the same session tab
     if (sessionStorage.getItem('telemetry_tracked') === 'true') {
       return;
     }
 
-    // Call free geolocation API over HTTPS
-    this.http.get<any>('https://ipapi.co/json/').pipe(
+    const headers: any = {};
+    const token = localStorage.getItem('token');
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    // Direct ping to backend telemetry log endpoint. 
+    // Backend resolves the visitor IP address to a geolocation country, state, and city.
+    this.http.post(this.telemetryUrl, {}, { headers }).pipe(
       catchError(err => {
-        console.warn('Geolocation API failed. Falling back to backend IP lookup:', err);
-        return of({
-          country_name: 'Unknown (Fallback)',
-          region: 'Unknown (Fallback)',
-          city: 'Unknown (Fallback)'
-        });
+        console.error('Failed to submit telemetry logs:', err);
+        return of(null);
       })
-    ).subscribe({
-      next: (geo) => {
-        const payload = {
-          country: geo.country_name || 'Desconhecido',
-          state: geo.region || 'Desconhecido',
-          city: geo.city || 'Desconhecido'
-        };
-
-        const headers: any = {};
-        const token = localStorage.getItem('token');
-        if (token) {
-          headers['Authorization'] = `Bearer ${token}`;
-        }
-
-        this.http.post(this.telemetryUrl, payload, { headers }).pipe(
-          catchError(err => {
-            console.error('Failed to submit telemetry logs:', err);
-            return of(null);
-          })
-        ).subscribe(() => {
-          sessionStorage.setItem('telemetry_tracked', 'true');
-        });
-      }
+    ).subscribe(() => {
+      sessionStorage.setItem('telemetry_tracked', 'true');
     });
   }
 }

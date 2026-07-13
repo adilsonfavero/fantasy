@@ -65,6 +65,10 @@ export class ApiService {
     return this.http.post<{ message: string, sponsor: Sponsor }>(`${this.baseUrl}/sponsors`, sponsor);
   }
 
+  updateSponsor(id: number, sponsor: Sponsor): Observable<{ message: string, sponsor: Sponsor }> {
+    return this.http.put<{ message: string, sponsor: Sponsor }>(`${this.baseUrl}/sponsors/${id}`, sponsor);
+  }
+
   deleteSponsor(id: number): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.baseUrl}/sponsors/${id}`);
   }

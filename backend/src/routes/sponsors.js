@@ -34,6 +34,30 @@ router.post('/', requireAdmin, async (req, res) => {
   }
 });
 
+// Update a sponsor (Admin only)
+router.put('/:id', requireAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { name, logo_url, website_url, description } = req.body;
+
+  if (!name) {
+    return res.status(400).json({ message: 'Nome da empresa patrocinadora é obrigatório.' });
+  }
+
+  try {
+    const result = await db.query(
+      'UPDATE sponsors SET name = $1, logo_url = $2, website_url = $3, description = $4 WHERE id = $5 RETURNING *',
+      [name, logo_url, website_url, description, id]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Patrocinador não encontrado.' });
+    }
+    res.json({ message: 'Patrocinador atualizado com sucesso!', sponsor: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Erro ao atualizar patrocinador.' });
+  }
+});
+
 // Delete a sponsor (Admin only)
 router.delete('/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;

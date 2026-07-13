@@ -29,6 +29,7 @@ export class AdminComponent implements OnInit {
   logoUrl = '';
   websiteUrl = '';
   description = '';
+  editingSponsorId = signal<number | null>(null);
 
   // Athletes State & Forms
   races: Race[] = [];
@@ -104,29 +105,66 @@ export class AdminComponent implements OnInit {
     this.successMessage = '';
     this.isSubmitting.set(true);
 
-    const newSponsor: Sponsor = {
+    const sponsorData: Sponsor = {
       name: this.name,
       logo_url: this.logoUrl || '',
       website_url: this.websiteUrl || '',
       description: this.description
     };
 
-    this.apiService.addSponsor(newSponsor).subscribe({
-      next: () => {
-        this.successMessage = 'Patrocinador adicionado com sucesso!';
-        this.name = '';
-        this.logoUrl = '';
-        this.websiteUrl = '';
-        this.description = '';
-        this.loadSponsors();
-        this.isSubmitting.set(false);
-      },
-      error: (err) => {
-        console.error(err);
-        this.errorMessage = err.error?.message || 'Erro ao cadastrar patrocinador.';
-        this.isSubmitting.set(false);
-      }
-    });
+    const editId = this.editingSponsorId();
+    if (editId) {
+      // Update existing sponsor
+      this.apiService.updateSponsor(editId, sponsorData).subscribe({
+        next: () => {
+          this.successMessage = 'Patrocinador atualizado com sucesso!';
+          this.cancelEditSponsor();
+          this.loadSponsors();
+          this.isSubmitting.set(false);
+        },
+        error: (err) => {
+          console.error(err);
+          this.errorMessage = err.error?.message || 'Erro ao atualizar patrocinador.';
+          this.isSubmitting.set(false);
+        }
+      });
+    } else {
+      // Create new sponsor
+      this.apiService.addSponsor(sponsorData).subscribe({
+        next: () => {
+          this.successMessage = 'Patrocinador adicionado com sucesso!';
+          this.cancelEditSponsor();
+          this.loadSponsors();
+          this.isSubmitting.set(false);
+        },
+        error: (err) => {
+          console.error(err);
+          this.errorMessage = err.error?.message || 'Erro ao cadastrar patrocinador.';
+          this.isSubmitting.set(false);
+        }
+      });
+    }
+  }
+
+  startEditSponsor(sponsor: Sponsor): void {
+    this.editingSponsorId.set(sponsor.id!);
+    this.name = sponsor.name;
+    this.logoUrl = sponsor.logo_url || '';
+    this.websiteUrl = sponsor.website_url || '';
+    this.description = sponsor.description;
+    this.errorMessage = '';
+    this.successMessage = '';
+    // Scroll to top of admin panel so user sees the form
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  cancelEditSponsor(): void {
+    this.editingSponsorId.set(null);
+    this.name = '';
+    this.logoUrl = '';
+    this.websiteUrl = '';
+    this.description = '';
+    this.errorMessage = '';
   }
 
   deleteSponsor(id: number): void {
