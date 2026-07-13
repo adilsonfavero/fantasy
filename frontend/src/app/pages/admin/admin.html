@@ -350,7 +350,11 @@
                   </div>
                   <div class="form-group">
                     <label for="jIcon" class="form-label">Ícone / Emoji</label>
-                    <input type="text" id="jIcon" name="jIcon" class="form-control" [(ngModel)]="jerseyIcon" placeholder="Ex: 🟡 👕 🔴"/>
+                    <select id="jIcon" name="jIcon" class="form-control" [(ngModel)]="jerseyIcon" required>
+                      @for (iconOpt of availableJerseyIcons; track iconOpt.icon) {
+                        <option [value]="iconOpt.icon">{{ iconOpt.icon }} - {{ iconOpt.name }}</option>
+                      }
+                    </select>
                   </div>
                   <div class="form-group">
                     <label for="jPts" class="form-label">Pontos por Etapa Vestida</label>

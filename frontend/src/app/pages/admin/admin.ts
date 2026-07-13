@@ -65,6 +65,20 @@ export class AdminComponent implements OnInit {
   jerseyPointsPerStage = 10;
   editingJerseyId = signal<number | null>(null);
 
+  availableJerseyIcons = [
+    { icon: '🟡', name: 'Amarela (Líder Geral - Tour)' },
+    { icon: '🟢', name: 'Verde (Pontos - Tour/Vuelta)' },
+    { icon: '⚪🔴', name: 'Bolinhas Vermelhas (Montanha - Tour)' },
+    { icon: '⚪', name: 'Branca (Jovem - Tour/Giro/Vuelta)' },
+    { icon: '💖', name: 'Rosa (Líder Geral - Giro)' },
+    { icon: '💜', name: 'Ciclamino (Pontos - Giro)' },
+    { icon: '🔵', name: 'Azul (Montanha - Giro)' },
+    { icon: '🔴', name: 'Vermelha (Líder Geral - Vuelta)' },
+    { icon: '⚪🔵', name: 'Bolinhas Azuis (Montanha - Vuelta)' },
+    { icon: '🌈', name: 'Arco-íris (Campeão Mundial)' },
+    { icon: '👕', name: 'Padrão' }
+  ];
+
   // ---- Scoring Rules State ----
   scoringRules: ScoringRule[] = [];
 
@@ -601,7 +615,7 @@ export class AdminComponent implements OnInit {
     this.editingJerseyId.set(null);
     this.jerseyName = '';
     this.jerseyColor = '#FFD700';
-    this.jerseyIcon = '👕';
+    this.jerseyIcon = '🟡';
     this.jerseyPointsPerStage = 10;
     this.errorMessage = '';
   }
